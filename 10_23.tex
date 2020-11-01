@@ -1,0 +1,517 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[intlimits]{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{ragged2e}
+\usepackage[letterpaper, margin=0.5in]{geometry}
+\usepackage{graphicx}
+\usepackage{cancel}
+\usepackage{mathtools}
+\usepackage{tabularx}
+\usepackage{arydshln}
+\usepackage{tensor}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage[boxed]{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{listings}
+\usepackage{textcomp}
+% \usepackage[pdf,tmpdir,singlefile]{graphviz}
+\usepackage{mathrsfs}
+\usepackage{bbm}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usepackage{enumitem}
+\usepackage{arydshln}
+\usepackage{relsize}
+\usepackage{multicol}
+\usepackage{scalerel}
+\usepackage{upgreek}
+\usepackage{wasysym}
+
+\usetikzlibrary{bayesnet}
+\setlist{noitemsep}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Formatting commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\n}{\hfill\break}
+\newcommand{\nn}{\vspace{0.5\baselineskip}\n}
+\newcommand{\up}{\vspace{-\baselineskip}}
+\newcommand{\hangblock}[2]{\par\noindent\settowidth{\hangindent}{\textbf{#1: }}\textbf{#1: }\!\!\!#2}
+\newcommand{\lemma}[1]{\hangblock{Lemma}{#1}}
+\newcommand{\defn}[1]{\hangblock{Defn}{#1}}
+\newcommand{\thm}[1]{\hangblock{Thm}{#1}}
+\newcommand{\cor}[1]{\hangblock{Cor}{#1}}
+\newcommand{\prop}[1]{\hangblock{Prop}{#1}}
+\newcommand{\ex}[1]{\hangblock{Ex}{#1}}
+\newcommand{\exer}[1]{\hangblock{Exer}{#1}}
+\newcommand{\fact}[1]{\hangblock{Fact}{#1}}
+\newcommand{\remark}[1]{\hangblock{Remark}{#1}}
+\newcommand{\proven}{\;$\square$\n}
+\newcommand{\problem}[1]{\par\noindent{#1}\n}
+\newcommand{\problempart}[2]{\par\noindent\indent{}\settowidth{\hangindent}{\textbf{(#1)} \indent{}}\textbf{(#1) }\!\!\!#2\n}
+\newcommand{\ptxt}[1]{\textrm{\textnormal{#1}}}
+\newcommand{\inlineeq}[1]{\centerline{$\displaystyle #1$}}
+\newcommand{\pageline}{\up\par\noindent\rule{\textwidth}{0.1pt}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Math commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set Theory
+\newcommand{\card}[1]{\left|#1\right|}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\setmid}{\;\middle|\;}
+\newcommand{\ps}[1]{\mathcal{P}\left(#1\right)}
+\newcommand{\pfinite}[1]{\mathcal{P}^{\ptxt{finite}}\left(#1\right)}
+\newcommand{\naturals}{\mathbb{N}}
+\newcommand{\N}{\naturals}
+\newcommand{\integers}{\mathbb{Z}}
+\newcommand{\Z}{\integers}
+\newcommand{\rationals}{\mathbb{Q}}
+\newcommand{\Q}{\rationals}
+\newcommand{\reals}{\mathbb{R}}
+\newcommand{\R}{\reals}
+\newcommand{\complex}{\mathbb{C}}
+\newcommand{\C}{\complex}
+\newcommand{\halfPlane}{\mathbb{H}}
+\let\H\relax
+\newcommand{\H}{\halfPlane}
+\newcommand{\comp}{^{\complement}}
+\DeclareMathOperator{\Hom}{Hom}
+\newcommand{\Ind}{\mathbbm{1}}
+\newcommand{\cut}{\setminus}
+\DeclareMathOperator{\elem}{elem}
+
+% Differentiable Manifolds
+\newcommand{\RP}{\mathbb{RP}}
+\newcommand{\CP}{\mathbb{RP}}
+\newcommand{\osubset}{\overset{\mathclap{\scalebox{0.5}{\ptxt{open}}}}{\subset}}
+\newcommand{\osubseteq}{\overset{\mathclap{\scalebox{0.5}{\ptxt{open}}}}{\subseteq}}
+\newcommand{\osupset}{\overset{\mathclap{\scalebox{0.5}{\ptxt{open}}}}{\supset}}
+\newcommand{\osupseteq}{\overset{\mathclap{\scalebox{0.5}{\ptxt{open}}}}{\supseteq}}
+\newcommand{\pdat}[3]{\left.\pd{#1}{#2}\right|_{#3}}
+\DeclareMathOperator{\so}{so}
+\DeclareMathOperator{\codim}{codim}
+
+% Graph Theory
+\let\deg\relax
+\DeclareMathOperator{\deg}{deg}
+\newcommand{\degp}{\ptxt{deg}^{+}}
+\newcommand{\degn}{\ptxt{deg}^{-}}
+\newcommand{\precdot}{\mathrel{\ooalign{$\prec$\cr\hidewidth\hbox{$\cdot\mkern0.5mu$}\cr}}}
+\newcommand{\succdot}{\mathrel{\ooalign{$\cdot\mkern0.5mu$\cr\hidewidth\hbox{$\succ$}\cr\phantom{$\succ$}}}}
+\DeclareMathOperator{\cl}{cl}
+\DeclareMathOperator{\affdim}{affdim}
+
+% Probability
+\newcommand{\parSymbol}{\P}
+\newcommand{\Prob}{\mathbb{P}}
+\renewcommand{\P}{\Prob}
+\newcommand{\Avg}{\mathbb{E}}
+\newcommand{\E}{\Avg}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\cov}{cov}
+\DeclareMathOperator{\Unif}{Unif}
+\DeclareMathOperator{\Binom}{Binom}
+\newcommand{\CI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+
+% Standard Math
+\newcommand{\inv}{^{-1}}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\ceil}[1]{\left\lceil{}#1\right\rceil{}}
+\newcommand{\floor}[1]{\left\lfloor{}#1\right\rfloor{}}
+\newcommand{\conj}[1]{\overline{#1}}
+\newcommand{\of}{\circ}
+\newcommand{\tri}{\triangle}
+\newcommand{\inj}{\hookrightarrow}
+\newcommand{\surj}{\twoheadrightarrow}
+\newcommand{\ndiv}{\nmid}
+\renewcommand{\epsilon}{\varepsilon}
+\newcommand{\divides}{\mid}
+\newcommand{\ndivides}{\nmid}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\sgn}{sgn}
+\newcommand{\map}[4]{\!\!\!\begin{array}[t]{rcl}#1 & \!\!\!\!\to & \!\!\!\!#2\\ {}#3 & \!\!\!\!\mapsto & \!\!\!\!#4\end{array}}
+\newcommand{\bigsum}[2]{\smashoperator[lr]{\sum_{\scalebox{#1}{$#2$}}}}
+\DeclareMathOperator{\gcf}{gcf}
+\newcommand{\restr}[2]{\left.#1\right|_{#2}}
+
+% Linear Algebra
+\newcommand{\Id}{\textrm{\textnormal{Id}}}
+\newcommand{\im}{\textrm{\textnormal{im}}}
+\newcommand{\norm}[1]{\abs{\abs{#1}}}
+\newcommand{\tpose}{^{T}\!}
+\newcommand{\iprod}[1]{\left<#1\right>}
+\newcommand{\giprod}{\iprod{\;\,,\;}}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\trace}{tr}
+\newcommand{\chgBasMat}[3]{\!\!\tensor*[_{#1}]{\left[#2\right]}{_{#3}}}
+\newcommand{\vecBas}[2]{\tensor*[]{\left[#1\right]}{_{#2}}}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\Mat}{Mat}
+\DeclareMathOperator{\vspan}{span}
+\DeclareMathOperator{\rank}{rank}
+\newcommand{\V}[1]{\vec{#1}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator{\compProj}{comp}
+\DeclareMathOperator{\row}{row}
+\newcommand{\smallPMatrix}[1]{\paren{\begin{smallmatrix}#1\end{smallmatrix}}}
+\newcommand{\smallBMatrix}[1]{\brack{\begin{smallmatrix}#1\end{smallmatrix}}}
+\newcommand{\pmat}[1]{\begin{pmatrix}#1\end{pmatrix}}
+\newcommand{\bmat}[1]{\begin{bmatrix}#1\end{bmatrix}}
+\newcommand{\dual}{^{*}}
+\newcommand{\pinv}{^{\dagger}}
+\newcommand{\horizontalMatrixLine}{\ptxt{\rotatebox[origin=c]{-90}{$|$}}}
+\DeclareMathOperator{\range}{range}
+\DeclareMathOperator{\Symm}{Symm}
+\DeclareMathOperator{\SU}{SU}
+
+% Multilinear Algebra
+\let\Lsym\L
+\let\L\relax
+\DeclareMathOperator{\L}{\mathscr{L}}
+\DeclareMathOperator{\A}{\mathcal{A}}
+\DeclareMathOperator{\Alt}{Alt}
+\DeclareMathOperator{\Sym}{Sym}
+\newcommand{\ot}{\otimes}
+\newcommand{\ox}{\otimes}
+\DeclareMathOperator{\asc}{asc}
+\DeclareMathOperator{\asSet}{set}
+\DeclareMathOperator{\sort}{sort}
+\DeclareMathOperator{\ringA}{\mathring{A}}
+
+% Topology
+\newcommand{\closure}[1]{\overline{#1}}
+\newcommand{\uball}{\mathcal{U}}
+\DeclareMathOperator{\Int}{Int}
+\DeclareMathOperator{\Ext}{Ext}
+\DeclareMathOperator{\Bd}{Bd}
+\DeclareMathOperator{\rInt}{rInt}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\ah}{ah}
+\newcommand{\LargerTau}{\mathlarger{\mathlarger{\mathlarger{\mathlarger{\tau}}}}}
+\newcommand{\Tau}{\mathcal{T}}
+
+% Analysis
+\DeclareMathOperator{\Graph}{Graph}
+\DeclareMathOperator{\epi}{epi}
+\DeclareMathOperator{\hypo}{hypo}
+\DeclareMathOperator{\supp}{supp}
+\newcommand{\lint}[2]{\underset{#1}{\overset{#2}{{\color{black}\underline{{\color{white}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\uint}[2]{\underset{#1}{\overset{#2}{{\color{white}\underline{{\color{black}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\alignint}[2]{\underset{#1}{\overset{#2}{{\color{white}\underline{{\color{white}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\extint}{\ptxt{ext}\int}
+\newcommand{\extalignint}[2]{\ptxt{ext}\alignint{#1}{#2}}
+\newcommand{\conv}{\ast}
+\newcommand{\pd}[2]{\frac{\partial{}#1}{\partial{}#2}}
+\newcommand{\del}{\nabla}
+\DeclareMathOperator{\grad}{grad}
+\DeclareMathOperator{\curl}{curl}
+\let\div\relax
+\DeclareMathOperator{\div}{div}
+\DeclareMathOperator{\vol}{vol}
+
+% Complex Analysis
+\let\Re\relax
+\DeclareMathOperator{\Re}{Re}
+\let\Im\relax
+\DeclareMathOperator{\Im}{Im}
+\DeclareMathOperator{\Res}{Res}
+
+% Abstract Algebra
+\DeclareMathOperator{\ord}{ord}
+\newcommand{\generated}[1]{\left<#1\right>}
+\newcommand{\cycle}[1]{\smallPMatrix{#1}}
+\newcommand{\id}{\ptxt{id}}
+\newcommand{\iso}{\cong}
+\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\SL}{SL}
+\DeclareMathOperator{\op}{op}
+\newcommand{\isom}[4]{\!\!\!\begin{array}[t]{rcl}#1 & \!\!\!\!\overset{\sim}{\to} & \!\!\!\!#2\\ #3 & \!\!\!\!\mapsto & \!\!\!\!#4\end{array}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\acts}{\;\reflectbox{\rotatebox[origin=c]{-90}{$\circlearrowright$}}\;}
+\newcommand{\disjunion}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+\DeclareMathOperator{\SO}{SO}
+\DeclareMathOperator{\stab}{stab}
+\DeclareMathOperator{\nullity}{nullity}
+\DeclareMathOperator{\Perm}{Perm}
+\DeclareMathOperator{\nsubgp}{\vartriangleleft}
+\DeclareMathOperator{\notnsubgp}{\ntriangleleft}
+\newcommand{\presentation}[2]{\left<#1\;\middle|\;#2\right>}
+\DeclareMathOperator{\Char}{char}
+\DeclareMathOperator{\fchar}{char}
+\DeclareMathOperator{\triv}{triv}
+\DeclareMathOperator{\reg}{reg}
+\DeclareMathOperator{\std}{std}
+\DeclareMathOperator{\Func}{Func}
+\DeclareMathOperator{\End}{End}
+
+% Convex Optimization
+\let\sectionSymbol\S
+\let\S\relax
+\newcommand{\S}{\mathbb{S}}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\ones}{\mathbbm{1}}
+\newcommand{\minimizeOver}[3]{\begin{array}{rl}\underset{#1}{\ptxt{minimize}} & #2\\ \ptxt{subject to} & #3\end{array}}
+\newcommand{\maximizeOver}[3]{\begin{array}{rl}\underset{#1}{\ptxt{maximize}} & #2\\ \ptxt{subject to} & #3\end{array}}
+\newcommand{\minimizationProblem}[2]{\minimizeOver{}{#1}{#2}}
+\newcommand{\maximizationProblem}[2]{\maximizeOver{}{#1}{#2}}
+\newcommand{\minimizeOverUnconstrained}[2]{\begin{array}{rl}\underset{#1}{\ptxt{minimize}} & #2\end{array}}
+\newcommand{\maximizeOverUnconstrained}[2]{\begin{array}{rl}\underset{#1}{\ptxt{maximize}} & #2\end{array}}
+\newcommand{\minimizationUnconstrained}[1]{\minimizeOverUnconstrained{}{#1}}
+\newcommand{\maximizationUnconstrained}[1]{\maximizeOverUnconstrained{}{#1}}
+\DeclareMathOperator{\argmin}{argmin}
+\DeclareMathOperator{\argmax}{argmax}
+
+% Proofs
+\newcommand{\st}{s.t.}
+\newcommand{\unique}{!}
+\newcommand{\iffdef}{\overset{\ptxt{def}}{\Leftrightarrow}}
+\newcommand{\eqdef}{\overset{\ptxt{def}}{=}}
+\newcommand{\eqVertical}{\rotatebox[origin=c]{90}{=}}
+\newcommand{\mapsfrom}{\mathrel{\reflectbox{\ensuremath{\mapsto}}}}
+\newcommand{\mapsdown}{\rotatebox[origin=c]{-90}{$\mapsto$}\mkern2mu}
+\newcommand{\mapsup}{\rotatebox[origin=c]{90}{$\mapsto$}\mkern2mu}
+\newcommand{\from}{\!\mathrel{\reflectbox{\ensuremath{\to}}}}
+
+% Brackets
+\newcommand{\paren}[1]{\left(#1\right)}
+\renewcommand{\brack}[1]{\left[#1\right]}
+\renewcommand{\brace}[1]{\left\{#1\right\}}
+\newcommand{\ang}[1]{\left<#1\right>}
+
+% Algorithms
+\algrenewcommand{\algorithmiccomment}[1]{\hskip 1em \texttt{// #1}}
+\algrenewcommand\algorithmicrequire{\textbf{Input:}}
+\algrenewcommand\algorithmicensure{\textbf{Output:}}
+\newcommand{\algP}{\ptxt{\textbf{P}}}
+\newcommand{\algNP}{\ptxt{\textbf{NP}}}
+\newcommand{\algNPC}{\ptxt{\textbf{NP-Complete}}}
+\newcommand{\algNPH}{\ptxt{\textbf{NP-Hard}}}
+\newcommand{\algEXP}{\ptxt{\textbf{EXP}}}
+\DeclareMathOperator{\fl}{fl}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Other commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\flag}[1]{\textbf{\textcolor{red}{#1}}}
+\let\uSym\u
+\let\u\relax
+\newcommand{\u}[1]{\underline{#1}}
+\let\bSym\b
+\let\b\relax
+\newcommand{\b}[1]{\textbf{#1}}
+\let\iSym\i
+\let\i\relax
+\newcommand{\i}[1]{\textit{#1}}
+\let\scSym\sc
+\let\sc\relax
+\newcommand{\sc}[1]{\textsc{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Make l's curvy in math environments %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mathcode`l="8000
+\begingroup
+\makeatletter
+\lccode`\~=`\l
+\DeclareMathSymbol{\lsb@l}{\mathalpha}{letters}{`l}
+\lowercase{\gdef~{\ifnum\the\mathgroup=\m@ne \ell \else \lsb@l \fi}}%
+\endgroup
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% Fix \vdots and \ddots %
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{letltxmacro}
+\LetLtxMacro\orgvdots\vdots
+\LetLtxMacro\orgddots\ddots
+
+\makeatletter
+\DeclareRobustCommand\vdots{%
+	\mathpalette\@vdots{}%
+}
+\newcommand*{\@vdots}[2]{%
+	% #1: math style
+	% #2: unused
+	\sbox0{$#1\cdotp\cdotp\cdotp\m@th$}%
+	\sbox2{$#1.\m@th$}%
+	\vbox{%
+		\dimen@=\wd0 %
+		\advance\dimen@ -3\ht2 %
+		\kern.5\dimen@
+		% remove side bearings
+		\dimen@=\wd2 %
+		\advance\dimen@ -\ht2 %
+		\dimen2=\wd0 %
+		\advance\dimen2 -\dimen@
+		\vbox to \dimen2{%
+			\offinterlineskip
+			\copy2 \vfill\copy2 \vfill\copy2 %
+		}%
+	}%
+}
+\DeclareRobustCommand\ddots{%
+	\mathinner{%
+		\mathpalette\@ddots{}%
+		\mkern\thinmuskip
+	}%
+}
+\newcommand*{\@ddots}[2]{%
+	% #1: math style
+	% #2: unused
+	\sbox0{$#1\cdotp\cdotp\cdotp\m@th$}%
+	\sbox2{$#1.\m@th$}%
+	\vbox{%
+		\dimen@=\wd0 %
+		\advance\dimen@ -3\ht2 %
+		\kern.5\dimen@
+		% remove side bearings
+		\dimen@=\wd2 %
+		\advance\dimen@ -\ht2 %
+		\dimen2=\wd0 %
+		\advance\dimen2 -\dimen@
+		\vbox to \dimen2{%
+			\offinterlineskip
+			\hbox{$#1\mathpunct{.}\m@th$}%
+			\vfill
+			\hbox{$#1\mathpunct{\kern\wd2}\mathpunct{.}\m@th$}%
+			\vfill
+			\hbox{$#1\mathpunct{\kern\wd2}\mathpunct{\kern\wd2}\mathpunct{.}\m@th$}%
+		}%
+	}%
+}
+\makeatother
+
+\newcommand{\B}{
+	\begin{tikzpicture}
+	\filldraw [fill=red, draw=black] (0, 0) rectangle (0.37, 0.45);
+	\draw [line width=0.5mm, white ] (0.1,0.08) -- (0.1,0.38);
+	\draw[line width=0.5mm, white ] (0.1, 0.35) .. controls (0.2, 0.35) and (0.4, 0.2625) .. (0.1, 0.225);
+	\draw[line width=0.5mm, white ] (0.1, 0.225) .. controls (0.2, 0.225) and (0.4, 0.1625) .. (0.1, 0.1);
+	\end{tikzpicture}
+}
+
+% Allow custom symbols as arrows in tikz-cd
+\tikzset{
+  symbol/.style={
+    draw=none,
+    every to/.append style={
+      edge node={node [sloped, allow upside down, auto=false]{$#1$}}}
+  }
+}
+% Example: \arrow[r,symbol=\cong]
+% https://tex.stackexchange.com/questions/394154/how-to-include-inclusion-subgroup-relationship-in-tikz-cd-diagram
+
+\author{Thomas Cohn}
+\title{Math 591 Lecture 22}
+\date{10/23/20} % Can also use \today
+
+\begin{document}
+\maketitle
+\setlength\RaggedRightParindent{\parindent}
+\RaggedRight
+
+\par\noindent
+\i{Note: The lecture on 10/21 was devoted to review for the exam.}\n
+
+\par\noindent
+Recall: We defined, for $X,Y\in\mathfrak{X}(M)$, $[X,Y]$ by regarding $X$ and $Y$ as operators on $C^{\infty}(M)$. Then $[X,Y]$ is the commutator $X\of{}Y-Y\of{}X$.\n
+
+\par\noindent
+Properties:
+\begin{itemize}[topsep=0pt, itemsep=0pt, label=-]
+	\item $[\,\cdot\,,\,\cdot\,]$ is bilinear over $\R$.
+	\item $[\,\cdot\,,\,\cdot\,]$ satisfies the Jacobi identity: $\forall{}X,Y,Z\in\mathfrak{X}(M)$, $[[X,Y],Z]+[[Z,X],Y]+[[Y,Z],X]=0$.\n
+	Proof: Just compute! It's very straightforward, and only uses the fact that composition is associative.
+\end{itemize}\up\n
+
+\defn{
+	A \u{Lie algebra} $\mathfrak{g}$ is a vector space (over $\R$), together with a bilinear map $[\,\cdot\,,\,\cdot\,]:\mathfrak{g}\times\mathfrak{g}\to\mathfrak{g}$, which
+	\begin{itemize}[topsep=0pt, itemsep=0pt, leftmargin=4\parindent, label=-]
+		\item Is skew-symmetric: $\forall{}A,B\in\mathfrak{g}$, $[A,B]=-[B,A]$.
+		\item Satisfies the Jacobi identity.
+	\end{itemize}\up\n
+}
+
+\ex{
+	For any manifold $M$, $\mathfrak{g}=\mathfrak{X}(M)$ is a Lie algebra.\n
+}
+
+\ex{
+	A finite dimensional example: Let $\mathfrak{g}=\set{\ptxt{$n\times{}n$ skew-symmetric real matrices}}\cong{}T_{I}O(n)$, with $[A,B]=AB-BA$ (using matrix multiplication).\n
+	Check: $[A,B]\in\mathfrak{g}$. Well, $(AB-BA)\tpose=B\tpose{}A\tpose-A\tpose{}B\tpose{}=(-B)(-A)-(-A)(-B)=BA-AB=-(AB-BA)$.\n
+	We say $o(n)\eqdef{}\mathfrak{g}$.\n
+}
+
+\par\noindent
+At some point (next week), we will prove the following:\n
+Claim: Given $A\in{}T_{I}O(n)$, define $A^{\sharp}\in\mathfrak{X}(O(n))$ by $\forall{}g\in{}O(n)$, $A^{\sharp}_{g}=gA$, and we claim that $A^{\sharp}_{g}\in{}T_{g}O(n)$.\n
+
+\par\noindent
+To interpret the formula, let $\map{L_{g}:O(n)}{O(n)}{k}{gk}$. Then $A^{\sharp}_{g}=(L_{g})_{*,I}(A)$, i.e., $(L_{g})_{*,I}:T_{I}O(n)\to{}T_{g}O(n)$.\n
+Then $\forall{}A,B\in{}T_{I}O(n)$, $\underbrace{[A,B]^{\sharp}}_{\substack{\ptxt{matrix}\\ \ptxt{commutator}}}=\underbrace{[A^{\sharp},B^{\sharp}]}_{\substack{\ptxt{vector field}\\ \ptxt{commutator}}}$. So $\sharp:o(n)\rightarrowtail\mathfrak{X}(O(n))$ is an injection, and $A^{\sharp}_{I}=A$.\n
+So $o(n)$ appears as a (finite-dimensional) Lie subalgebra of $\mathfrak{X}(O(n))$.\n
+There is more about this to come in the next chapter...\n
+
+\par\noindent
+Now, back to the general study of vector fields. We've looked at vector fields as operators. Now, let's look at them as generators of dynamics.\n
+
+\defn{
+	Let $X\in\mathfrak{X}(M)$. An \u{integral curve} of $X$ is a map
+	\[
+		c:(a,b)\to{}M\qquad{}a<b;a,b\in\R\cup\set{\pm\infty}
+	\]
+	such that $\forall{}t\in(a,b)$ ``time'', $\dot{c}(t)=X_{c(t)}\in{}T_{c(t)}M$.\n
+}
+
+\newpage
+\thm{
+	(Existence and Uniqueness of Integral Curves)\n
+	Given $X\in\mathfrak{X}(M)$, $p\in{}M$, then there exists an integral curve of $X$, $c:(a,b)\to{}M$, with $a<0<b$, such that $c(o)=p$. Moreover, any two such curves agree on the intersection of their domains.\nn
+	Proof: Reduce to the Euclidean case near $p$. Introduce local coordinates near $p$. WOLOG $\phi(p)=0\in\R^{n}$. We can write
+	\[
+		\restr{X}{U}=\sum_{i=1}^{n}f_{i}\pd{}{x^{i}}
+	\]
+	where the $f_{i}$ are smooth functions on $U$. Then we have
+	\[
+		\begin{tikzcd}[ampersand replacement=\&]
+			(a,b) \arrow[r, "c"] \arrow[dr, "\tilde{c}", swap] \& U \arrow[d, "\phi"] \\[-5pt]
+			\& \R^{n}
+		\end{tikzcd}
+	\]
+	with the unkown curve $\tilde{c}(t)=(x^{1}(t),\ldots,x^{n}(t))$, with each $x^{i}:(a,b)\to\R$ unknown. Note:
+	\[
+		\left\{\begin{array}{l}
+			\dot{c}(t)=X_{c(t)}\\
+			c(0)=p
+		\end{array}\right.\qquad\Leftrightarrow\qquad\left\{\begin{array}{l}
+			\forall{}i,\;x^{i}(t)=f_{i}(c(t))\\
+			x^{i}(0)=0
+		\end{array}\right.
+	\]
+	Well, $f^{i}(c(t))=\tilde{f}_{i}(x^{1}(t),\ldots,x^{n}(t))$, and these are real-valued functions, so $\tilde{x}^{i}(t)=\tilde{f}_{i}(x^{1}(t),\ldots,x^{n}(t))$. So we have a system of ordinary differential equations (ODEs), with an initial condition.\n
+	Well, the derivatives $\frac{dx^{i}(t)}{dt}=\dot{x}^{i}(t)$ are the left-hand side, so we can just quote the existence and uniqueness theorems from the theory of ordinary differential equations. Thus, we get the theorem in a coordinate chart. Now, consider a covering of $c$ by overlapping coordinate charts...\proven
+}
+
+\ex{
+	Let $M=(\R_{>0})^{2}$ -- the upper-left quadrant of $\R^{2}$, with standard coordinates $(x,y)$.\n
+	Let $X=yx^{2}\pd{}{x}$.\nn
+	Well, $\dot{x}=yx^{2}$ and $\dot{y}=0$, so $\forall{}t$, $y(t)=y(0)$. So $\frac{dx}{dt}=y(0)x^{2}$. We can solve this using separation of variables:
+	\begin{align*}
+		\frac{dx}{x^{2}} & =y(0)dt\\
+		\int{}x^{-2}\,dx & =\int{}y(0)\,dy\\
+		-\frac{1}{x(t)}+\frac{1}{x(0)} & =y(0)t\\
+		\frac{1}{x(t)} & =\frac{1}{x(0)}-yt=\frac{1-y(0)x(0)t}{x(0)}\\
+		x(t) & =\frac{x(0)}{1-x(0)y(0)t}
+	\end{align*}
+	And we also have $y(t)=y(0)$. Well, $x$ will escape to infinity at the ``escape time'' $T=\frac{1}{x(0)y(0)}$. So the maximal domain of an integral curve with these initial conditions is $(-\infty,T)$.\n
+}
+
+\par\noindent
+This demonstrates a problem -- if we want to look at maximal integral curves, the maximal domain may depend on the initial conditions.\n
+
+\end{document}
