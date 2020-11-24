@@ -1,0 +1,581 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[intlimits]{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{ragged2e}
+\usepackage[letterpaper, margin=0.5in]{geometry}
+\usepackage{graphicx}
+\usepackage{cancel}
+\usepackage{mathtools}
+\usepackage{tabularx}
+\usepackage{arydshln}
+\usepackage{tensor}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage[boxed]{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{listings}
+\usepackage{textcomp}
+% \usepackage[pdf,tmpdir,singlefile]{graphviz}
+\usepackage{mathrsfs}
+\usepackage{bbm}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usepackage{enumitem}
+\usepackage{arydshln}
+\usepackage{relsize}
+\usepackage{multicol}
+\usepackage{scalerel}
+\usepackage{upgreek}
+\usepackage{wasysym}
+
+\usetikzlibrary{bayesnet}
+\setlist{noitemsep}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Formatting commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\n}{\hfill\break}
+\newcommand{\nn}{\vspace{0.5\baselineskip}\n}
+\newcommand{\up}{\vspace{-\baselineskip}}
+\newcommand{\hangblock}[2]{\par\noindent\settowidth{\hangindent}{\textbf{#1: }}\textbf{#1: }\nolinebreak#2}
+\newcommand{\lemma}[1]{\hangblock{Lemma}{#1}}
+\newcommand{\defn}[1]{\hangblock{Defn}{#1}}
+\newcommand{\thm}[1]{\hangblock{Thm}{#1}}
+\newcommand{\cor}[1]{\hangblock{Cor}{#1}}
+\newcommand{\prop}[1]{\hangblock{Prop}{#1}}
+\newcommand{\ex}[1]{\hangblock{Ex}{#1}}
+\newcommand{\exer}[1]{\hangblock{Exer}{#1}}
+\newcommand{\fact}[1]{\hangblock{Fact}{#1}}
+\newcommand{\remark}[1]{\hangblock{Remark}{#1}}
+\newcommand{\proven}{\;$\square$\n}
+\newcommand{\problem}[1]{\par\noindent{#1}\n}
+\newcommand{\problempart}[2]{\par\noindent\indent{}\settowidth{\hangindent}{\textbf{(#1)} \indent{}}\textbf{(#1) }\nolinebreak#2\n}
+\newcommand{\ptxt}[1]{\textrm{\textnormal{#1}}}
+\newcommand{\inlineeq}[1]{\centerline{$\displaystyle #1$}}
+\newcommand{\pageline}{\up\par\noindent\rule{\textwidth}{0.1pt}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Math commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set Theory
+\newcommand{\card}[1]{\left|#1\right|}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\setmid}{\;\middle|\;}
+\newcommand{\ps}[1]{\mathcal{P}\left(#1\right)}
+\newcommand{\pfinite}[1]{\mathcal{P}^{\ptxt{finite}}\left(#1\right)}
+\newcommand{\naturals}{\mathbb{N}}
+\newcommand{\N}{\naturals}
+\newcommand{\integers}{\mathbb{Z}}
+\newcommand{\Z}{\integers}
+\newcommand{\rationals}{\mathbb{Q}}
+\newcommand{\Q}{\rationals}
+\newcommand{\reals}{\mathbb{R}}
+\newcommand{\R}{\reals}
+\newcommand{\complex}{\mathbb{C}}
+\newcommand{\C}{\complex}
+\newcommand{\halfPlane}{\mathbb{H}}
+\let\HSym\H
+\let\H\relax
+\newcommand{\H}{\halfPlane}
+\newcommand{\comp}{^{\complement}}
+\DeclareMathOperator{\Hom}{Hom}
+\newcommand{\Ind}{\mathbbm{1}}
+\newcommand{\cut}{\setminus}
+\DeclareMathOperator{\elem}{elem}
+
+% Differentiable Manifolds
+\newcommand{\RP}{\mathbb{RP}}
+\newcommand{\CP}{\mathbb{RP}}
+\newcommand{\osubset}{\overset{\mathclap{\scalebox{0.5}{\ptxt{open}}}}{\subset}}
+\newcommand{\osubseteq}{\overset{\mathclap{\scalebox{0.5}{\ptxt{open}}}}{\subseteq}}
+\newcommand{\osupset}{\overset{\mathclap{\scalebox{0.5}{\ptxt{open}}}}{\supset}}
+\newcommand{\osupseteq}{\overset{\mathclap{\scalebox{0.5}{\ptxt{open}}}}{\supseteq}}
+\newcommand{\pdat}[3]{\left.\pd{#1}{#2}\right|_{#3}}
+\DeclareMathOperator{\so}{so}
+\DeclareMathOperator{\codim}{codim}
+\DeclareMathOperator{\Diff}{Diff}
+\let\dSym\d
+\let\d\relax
+\newcommand{\d}{\partial}
+\DeclareMathOperator{\gl}{gl}
+
+% Graph Theory
+\let\deg\relax
+\DeclareMathOperator{\deg}{deg}
+\newcommand{\degp}{\ptxt{deg}^{+}}
+\newcommand{\degn}{\ptxt{deg}^{-}}
+\newcommand{\precdot}{\mathrel{\ooalign{$\prec$\cr\hidewidth\hbox{$\cdot\mkern0.5mu$}\cr}}}
+\newcommand{\succdot}{\mathrel{\ooalign{$\cdot\mkern0.5mu$\cr\hidewidth\hbox{$\succ$}\cr\phantom{$\succ$}}}}
+\DeclareMathOperator{\cl}{cl}
+\DeclareMathOperator{\affdim}{affdim}
+
+% Probability
+\newcommand{\parSymbol}{\P}
+\newcommand{\Prob}{\mathbb{P}}
+\renewcommand{\P}{\Prob}
+\newcommand{\Avg}{\mathbb{E}}
+\newcommand{\E}{\Avg}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\cov}{cov}
+\DeclareMathOperator{\Unif}{Unif}
+\DeclareMathOperator{\Binom}{Binom}
+\newcommand{\CI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+
+% Standard Math
+\newcommand{\inv}{^{-1}}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\ceil}[1]{\left\lceil{}#1\right\rceil{}}
+\newcommand{\floor}[1]{\left\lfloor{}#1\right\rfloor{}}
+\newcommand{\conj}[1]{\overline{#1}}
+\newcommand{\of}{\circ}
+\newcommand{\tri}{\triangle}
+\newcommand{\inj}{\hookrightarrow}
+\newcommand{\surj}{\twoheadrightarrow}
+\newcommand{\ndiv}{\nmid}
+\renewcommand{\epsilon}{\varepsilon}
+\newcommand{\divides}{\mid}
+\newcommand{\ndivides}{\nmid}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\sgn}{sgn}
+\newcommand{\map}[4]{\!\!\!\begin{array}[t]{rcl}#1 & \!\!\!\!\to & \!\!\!\!#2\\ {}#3 & \!\!\!\!\mapsto & \!\!\!\!#4\end{array}}
+\newcommand{\bigsum}[2]{\smashoperator[lr]{\sum_{\scalebox{#1}{$#2$}}}}
+\DeclareMathOperator{\gcf}{gcf}
+\newcommand{\restr}[2]{\left.#1\right|_{#2}}
+
+% Linear Algebra
+\newcommand{\Id}{\textrm{\textnormal{Id}}}
+\newcommand{\im}{\textrm{\textnormal{im}}}
+\newcommand{\norm}[1]{\abs{\abs{#1}}}
+\newcommand{\tpose}{^{T}\!}
+\newcommand{\iprod}[1]{\left<#1\right>}
+\newcommand{\giprod}{\iprod{\;\,,\;}}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\trace}{tr}
+\newcommand{\chgBasMat}[3]{\!\!\tensor*[_{#1}]{\left[#2\right]}{_{#3}}}
+\newcommand{\vecBas}[2]{\tensor*[]{\left[#1\right]}{_{#2}}}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\Mat}{Mat}
+\DeclareMathOperator{\vspan}{span}
+\DeclareMathOperator{\rank}{rank}
+\newcommand{\V}[1]{\vec{#1}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator{\compProj}{comp}
+\DeclareMathOperator{\row}{row}
+\newcommand{\smallPMatrix}[1]{\paren{\begin{smallmatrix}#1\end{smallmatrix}}}
+\newcommand{\smallBMatrix}[1]{\brack{\begin{smallmatrix}#1\end{smallmatrix}}}
+\newcommand{\pmat}[1]{\begin{pmatrix}#1\end{pmatrix}}
+\newcommand{\bmat}[1]{\begin{bmatrix}#1\end{bmatrix}}
+\newcommand{\dual}{^{*}}
+\newcommand{\pinv}{^{\dagger}}
+\newcommand{\horizontalMatrixLine}{\ptxt{\rotatebox[origin=c]{-90}{$|$}}}
+\DeclareMathOperator{\range}{range}
+\DeclareMathOperator{\Symm}{Symm}
+\DeclareMathOperator{\SU}{SU}
+
+% Multilinear Algebra
+\let\Lsym\L
+\let\L\relax
+\DeclareMathOperator{\L}{\mathscr{L}}
+\DeclareMathOperator{\A}{\mathcal{A}}
+\DeclareMathOperator{\Alt}{Alt}
+\DeclareMathOperator{\Sym}{Sym}
+\newcommand{\ot}{\otimes}
+\newcommand{\ox}{\otimes}
+\DeclareMathOperator{\asc}{asc}
+\DeclareMathOperator{\asSet}{set}
+\DeclareMathOperator{\sort}{sort}
+\DeclareMathOperator{\ringA}{\mathring{A}}
+
+% Topology
+\newcommand{\closure}[1]{\overline{#1}}
+\newcommand{\uball}{\mathcal{U}}
+\DeclareMathOperator{\Int}{Int}
+\DeclareMathOperator{\Ext}{Ext}
+\DeclareMathOperator{\Bd}{Bd}
+\DeclareMathOperator{\rInt}{rInt}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\ah}{ah}
+\newcommand{\LargerTau}{\mathlarger{\mathlarger{\mathlarger{\mathlarger{\tau}}}}}
+\newcommand{\Tau}{\mathcal{T}}
+
+% Analysis
+\DeclareMathOperator{\Graph}{Graph}
+\DeclareMathOperator{\epi}{epi}
+\DeclareMathOperator{\hypo}{hypo}
+\DeclareMathOperator{\supp}{supp}
+\newcommand{\lint}[2]{\underset{#1}{\overset{#2}{{\color{black}\underline{{\color{white}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\uint}[2]{\underset{#1}{\overset{#2}{{\color{white}\underline{{\color{black}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\alignint}[2]{\underset{#1}{\overset{#2}{{\color{white}\underline{{\color{white}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\extint}{\ptxt{ext}\int}
+\newcommand{\extalignint}[2]{\ptxt{ext}\alignint{#1}{#2}}
+\newcommand{\conv}{\ast}
+\newcommand{\pd}[2]{\frac{\partial{}#1}{\partial{}#2}}
+\newcommand{\del}{\nabla}
+\DeclareMathOperator{\grad}{grad}
+\DeclareMathOperator{\curl}{curl}
+\let\div\relax
+\DeclareMathOperator{\div}{div}
+\DeclareMathOperator{\vol}{vol}
+
+% Complex Analysis
+\let\Re\relax
+\DeclareMathOperator{\Re}{Re}
+\let\Im\relax
+\DeclareMathOperator{\Im}{Im}
+\DeclareMathOperator{\Res}{Res}
+
+% Abstract Algebra
+\DeclareMathOperator{\ord}{ord}
+\newcommand{\generated}[1]{\left<#1\right>}
+\newcommand{\cycle}[1]{\smallPMatrix{#1}}
+\newcommand{\id}{\ptxt{id}}
+\newcommand{\iso}{\cong}
+\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\SL}{SL}
+\DeclareMathOperator{\op}{op}
+\newcommand{\isom}[4]{\!\!\!\begin{array}[t]{rcl}#1 & \!\!\!\!\overset{\sim}{\to} & \!\!\!\!#2\\ #3 & \!\!\!\!\mapsto & \!\!\!\!#4\end{array}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\acts}{\;\reflectbox{\rotatebox[origin=c]{-90}{$\circlearrowright$}}\;}
+\newcommand{\disjunion}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+\DeclareMathOperator{\SO}{SO}
+\DeclareMathOperator{\stab}{stab}
+\DeclareMathOperator{\nullity}{nullity}
+\DeclareMathOperator{\Perm}{Perm}
+\DeclareMathOperator{\nsubgp}{\vartriangleleft}
+\DeclareMathOperator{\notnsubgp}{\ntriangleleft}
+\newcommand{\presentation}[2]{\left<#1\;\middle|\;#2\right>}
+\DeclareMathOperator{\Char}{char}
+\DeclareMathOperator{\fchar}{char}
+\DeclareMathOperator{\triv}{triv}
+\DeclareMathOperator{\reg}{reg}
+\DeclareMathOperator{\std}{std}
+\DeclareMathOperator{\Func}{Func}
+\DeclareMathOperator{\End}{End}
+
+% Convex Optimization
+\let\sectionSymbol\S
+\let\S\relax
+\newcommand{\S}{\mathbb{S}}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\ones}{\mathbbm{1}}
+\newcommand{\minimizeOver}[3]{\begin{array}{rl}\underset{#1}{\ptxt{minimize}} & #2\\ \ptxt{subject to} & #3\end{array}}
+\newcommand{\maximizeOver}[3]{\begin{array}{rl}\underset{#1}{\ptxt{maximize}} & #2\\ \ptxt{subject to} & #3\end{array}}
+\newcommand{\minimizationProblem}[2]{\minimizeOver{}{#1}{#2}}
+\newcommand{\maximizationProblem}[2]{\maximizeOver{}{#1}{#2}}
+\newcommand{\minimizeOverUnconstrained}[2]{\begin{array}{rl}\underset{#1}{\ptxt{minimize}} & #2\end{array}}
+\newcommand{\maximizeOverUnconstrained}[2]{\begin{array}{rl}\underset{#1}{\ptxt{maximize}} & #2\end{array}}
+\newcommand{\minimizationUnconstrained}[1]{\minimizeOverUnconstrained{}{#1}}
+\newcommand{\maximizationUnconstrained}[1]{\maximizeOverUnconstrained{}{#1}}
+\DeclareMathOperator{\argmin}{argmin}
+\DeclareMathOperator{\argmax}{argmax}
+
+% Proofs
+\newcommand{\st}{s.t.}
+\newcommand{\unique}{!}
+\newcommand{\iffdef}{\overset{\ptxt{def}}{\Leftrightarrow}}
+\newcommand{\eqdef}{\overset{\ptxt{def}}{=}}
+\newcommand{\eqVertical}{\rotatebox[origin=c]{90}{=}}
+\newcommand{\mapsfrom}{\mathrel{\reflectbox{\ensuremath{\mapsto}}}}
+\newcommand{\mapsdown}{\rotatebox[origin=c]{-90}{$\mapsto$}\mkern2mu}
+\newcommand{\mapsup}{\rotatebox[origin=c]{90}{$\mapsto$}\mkern2mu}
+\newcommand{\from}{\!\mathrel{\reflectbox{\ensuremath{\to}}}}
+\newcommand{\labeledeq}[1]{\overset{\mathclap{\ptxt{#1}}}{=}}
+
+% Brackets
+\newcommand{\paren}[1]{\left(#1\right)}
+\renewcommand{\brack}[1]{\left[#1\right]}
+\renewcommand{\brace}[1]{\left\{#1\right\}}
+\newcommand{\ang}[1]{\left<#1\right>}
+
+% Algorithms
+\algrenewcommand{\algorithmiccomment}[1]{\hskip 1em \texttt{// #1}}
+\algrenewcommand\algorithmicrequire{\textbf{Input:}}
+\algrenewcommand\algorithmicensure{\textbf{Output:}}
+\newcommand{\algP}{\ptxt{\textbf{P}}}
+\newcommand{\algNP}{\ptxt{\textbf{NP}}}
+\newcommand{\algNPC}{\ptxt{\textbf{NP-Complete}}}
+\newcommand{\algNPH}{\ptxt{\textbf{NP-Hard}}}
+\newcommand{\algEXP}{\ptxt{\textbf{EXP}}}
+\DeclareMathOperator{\fl}{fl}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Other commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\flag}[1]{\textbf{\textcolor{red}{#1}}}
+\let\uSym\u
+\let\u\relax
+\newcommand{\u}[1]{\underline{#1}}
+\let\bSym\b
+\let\b\relax
+\newcommand{\b}[1]{\textbf{#1}}
+\let\iSym\i
+\let\i\relax
+\newcommand{\i}[1]{\textit{#1}}
+\let\scSym\sc
+\let\sc\relax
+\newcommand{\sc}[1]{\textsc{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Make l's curvy in math environments %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mathcode`l="8000
+\begingroup
+\makeatletter
+\lccode`\~=`\l
+\DeclareMathSymbol{\lsb@l}{\mathalpha}{letters}{`l}
+\lowercase{\gdef~{\ifnum\the\mathgroup=\m@ne \ell \else \lsb@l \fi}}%
+\endgroup
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% Fix \vdots and \ddots %
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{letltxmacro}
+\LetLtxMacro\orgvdots\vdots
+\LetLtxMacro\orgddots\ddots
+
+\makeatletter
+\DeclareRobustCommand\vdots{%
+	\mathpalette\@vdots{}%
+}
+\newcommand*{\@vdots}[2]{%
+	% #1: math style
+	% #2: unused
+	\sbox0{$#1\cdotp\cdotp\cdotp\m@th$}%
+	\sbox2{$#1.\m@th$}%
+	\vbox{%
+		\dimen@=\wd0 %
+		\advance\dimen@ -3\ht2 %
+		\kern.5\dimen@
+		% remove side bearings
+		\dimen@=\wd2 %
+		\advance\dimen@ -\ht2 %
+		\dimen2=\wd0 %
+		\advance\dimen2 -\dimen@
+		\vbox to \dimen2{%
+			\offinterlineskip
+			\copy2 \vfill\copy2 \vfill\copy2 %
+		}%
+	}%
+}
+\DeclareRobustCommand\ddots{%
+	\mathinner{%
+		\mathpalette\@ddots{}%
+		\mkern\thinmuskip
+	}%
+}
+\newcommand*{\@ddots}[2]{%
+	% #1: math style
+	% #2: unused
+	\sbox0{$#1\cdotp\cdotp\cdotp\m@th$}%
+	\sbox2{$#1.\m@th$}%
+	\vbox{%
+		\dimen@=\wd0 %
+		\advance\dimen@ -3\ht2 %
+		\kern.5\dimen@
+		% remove side bearings
+		\dimen@=\wd2 %
+		\advance\dimen@ -\ht2 %
+		\dimen2=\wd0 %
+		\advance\dimen2 -\dimen@
+		\vbox to \dimen2{%
+			\offinterlineskip
+			\hbox{$#1\mathpunct{.}\m@th$}%
+			\vfill
+			\hbox{$#1\mathpunct{\kern\wd2}\mathpunct{.}\m@th$}%
+			\vfill
+			\hbox{$#1\mathpunct{\kern\wd2}\mathpunct{\kern\wd2}\mathpunct{.}\m@th$}%
+		}%
+	}%
+}
+\makeatother
+
+\newcommand{\B}{
+	\begin{tikzpicture}
+	\filldraw [fill=red, draw=black] (0, 0) rectangle (0.37, 0.45);
+	\draw [line width=0.5mm, white ] (0.1,0.08) -- (0.1,0.38);
+	\draw[line width=0.5mm, white ] (0.1, 0.35) .. controls (0.2, 0.35) and (0.4, 0.2625) .. (0.1, 0.225);
+	\draw[line width=0.5mm, white ] (0.1, 0.225) .. controls (0.2, 0.225) and (0.4, 0.1625) .. (0.1, 0.1);
+	\end{tikzpicture}
+}
+
+% Allow custom symbols as arrows in tikz-cd
+\tikzset{
+  symbol/.style={
+    draw=none,
+    every to/.append style={
+      edge node={node [sloped, allow upside down, auto=false]{$#1$}}}
+  }
+}
+% Example: \arrow[r,symbol=\cong]
+% https://tex.stackexchange.com/questions/394154/how-to-include-inclusion-subgroup-relationship-in-tikz-cd-diagram
+
+\author{Thomas Cohn}
+\title{Math 591 Lecure 28}
+\date{11/6/20} % Can also use \today
+
+\begin{document}
+\maketitle
+\setlength\RaggedRightParindent{\parindent}
+\RaggedRight
+
+\par\noindent
+Recall: For $G$ a Lie group, $\mathfrak{g}=T_{e}G$ is its Lie algebra. $\forall{}A\in\mathfrak{g}$, $A^{\sharp}$ is the left-invariant vector field on $G$ determined by $A$, that is, $\forall{}g\in{}G$, $A^{\sharp}_{g}\eqdef(L_{g})_{*,e}(A)$. In particular, $A^{\sharp}_{e}=A$.\n
+
+\defn{
+	$\forall{}A\in\mathfrak{g}$, $t\in\R$, $\exp{}t\,A$ is the integral curve of $A^{\sharp}$ at $e$, at time $t$.\n
+}
+
+\defn{
+	$\map{\exp:\mathfrak{g}}{G}{A}{\restr{\exp{}t\,A}{t=1}}$\n
+}
+
+\prop{
+	$\exp$ is smooth.\nn
+	Proof: Introduce the field $X\in\mathfrak{X}(G\times\mathfrak{g})$, defined by, $\forall{}(g,A)\in{}G\times\mathfrak{g}$,
+	\[
+		X_{(g,A)}=(A^{\sharp}_{g},0)\in{}T_{g}G\times{}T_{A}\mathfrak{g}=T_{(g,A)}(G\times\mathfrak{g})=T_{g}G\times{}\mathfrak{g}
+	\]
+	$X$ is smooth. Its flow, denoted $F$, is $F_{t}(g,A)=(F_{t}^{A}(g),A)$, where $F^{A}$ is the flow of $A^{\sharp}$. Thus, the time-$1$ map is $C^{\infty}$.
+	% \[
+	% 	\begin{tikzcd}[ampersand replacement=\&]
+	% 		g \arrow[r, symbol=\cong]
+	% 		\arrow[rrrr, bend right=15, phantom, ""{coordinate, name=Z}]
+	% 		\arrow[rrrr, to path={
+	% 		--(\tikztostart.south)
+	% 		|-(Z)
+	% 		-|(\tikztotarget.south)
+	% 		--(\tikztotarget.south)
+	% 		}, "\exp", swap]
+	% 		\&[-15pt] \set{e}\times\mathfrak{g} \arrow[r, hook] \& G\times\mathfrak{g} \arrow[r, "F_{1}"] \& G\times\mathfrak{g} \arrow[r, "\pi_{G}"] \& G
+	% 	\end{tikzcd}
+	% \]
+	% \[
+	% 	\begin{tikzcd}[ampersand replacement=\&]
+	% 		g \arrow[r, symbol=\cong]
+	% 		\arrow[rr, bend right=25, phantom, ""{coordinate, name=Z1}]
+	% 		\&[-15pt] \set{e}\times\mathfrak{g} \arrow[r, hook] \& G\times\mathfrak{g}
+	% 		\arrow[rr, bend right=25, phantom, ""{coordinate, name=Z2}]
+	% 		\arrow[r, "F_{1}"] \& G\times\mathfrak{g} \arrow[r, "\pi_{G}"] \& G
+	% 		\arrow[llll, to path={
+	% 			--(\tikztostart.south)
+	% 			|-(Z2)
+	% 			--(Z1)\tikztonodes
+	% 			-|(\tikztotarget.south)
+	% 			--(\tikztotarget.south)
+	% 		}, "\exp", leftarrow]
+	% 	\end{tikzcd}
+	% \]
+	\[
+		\begin{tikzcd}[ampersand replacement=\&]
+			g \arrow[r, symbol=\cong]
+			\&[-15pt]
+			\set{e}\times\mathfrak{g} \arrow[r, hook]
+			\arrow[start anchor={[xshift=-1em]south}, end anchor={[xshift=1em]south}, bend right=90, phantom, ""{coordinate, name=Z1}]
+			\& G\times\mathfrak{g}
+			\arrow[r, "F_{1}"]
+			\&
+			G\times\mathfrak{g} \arrow[r, "\pi_{G}"]
+			\arrow[start anchor={[xshift=-1em]south}, end anchor={[xshift=1em]south}, bend right=90, phantom, ""{coordinate, name=Z2}]
+			\&
+			G
+			\arrow[llll, to path={
+				--(\tikztostart.south)
+				|-(Z2)
+				--(Z1)\tikztonodes
+				-|(\tikztotarget.south)
+				--(\tikztotarget.south)
+			}, "\exp", leftarrow, pos=0.48]
+		\end{tikzcd}
+	\]
+	Because $F_{1}(e,A)=(\underbrace{F^{A}_{1}(e)}_{\exp(A)},A)$. We conclude that $\exp$ is smooth.\proven
+}
+
+\prop{
+	With the same notation -- $A\in{}\mathfrak{g}$, $F^{A}$ the flow of $A^{\sharp}$ -- $\forall{}g\in{}G$, $F_{t}^{A}(g)=g\cdot\exp{}t\,A$ (with $\cdot$ group multiplication).\nn
+	Proof: $\frac{d}{dt}(g\cdot\exp{}t\,A)=\frac{d}{dt}L_{g}(\exp{}t\,A)=(L_{g})_{*,\exp(A)}(A^{\sharp}_{\exp{}t\,A})=A^{\sharp}_{g\cdot\exp{}t\,A}$.\n
+	This is precisely the ODE satisfied by $t\mapsto{}F^{A}_{t}(g)$.\proven
+}
+
+\defn{
+	If $H,G$ are Lie groups, then a \u{Lie group morphism} from $H$ to $G$ is a smooth map $F:H\to{}G$ that is also a group homomorphism.\n
+}
+
+\prop{
+	Let $F:H\to{}G$ be a Lie group homomorphism. Then
+	\begin{enumerate}[label=\alph*), leftmargin=4\parindent]
+		\item $\forall{}A\in\mathfrak{h}=T_{e}H$, $A^{\sharp}\in\mathfrak{X}(H)$ and $[\underbrace{F_{*,e}(A)}_{\in{}T_{e}G=\mathfrak{g}}]^{\sharp}\in\mathfrak{X}(G)$. These two fields are $F$-related.
+		\item $\forall{}A\in\mathfrak{h}$, $F(\underbrace{\exp{}}_{\ptxt{in }H}A)=\underbrace{\exp}_{\ptxt{in }G}(F_{*,e}(A))$.
+		\item $F_{*,e}:\mathfrak{h}\to\mathfrak{g}$ is a Lie algebra morphism. That is, $\forall{}A,B\in\mathfrak{h}$, $F_{*,e}(\brack{A,B})=\brack{F_{*,e}(A),F_{*,e}(B)}$ (with the appropriate Lie brackets).
+	\end{enumerate}\up\n
+	Proof: (b) and (c) follow directly from (a).\n
+	Claim: $\forall{}h\in{}H$, the following diagram commutes:
+	\[
+		\begin{tikzcd}[ampersand replacement=\&]
+			H \arrow[r, "F"] \arrow[d, "L_{h}", swap] \& G \arrow[d, "L_{F(h)}"]\\
+			H \arrow[r, "F", swap] \& G
+		\end{tikzcd}
+	\]
+	Check: let $k\in{}H$. Then
+	\[
+		(F\of{}L_{h})(k)=F(hk)=F(h)F(k)=L_{F(h)}(F(k))
+	\]
+	because $F$ is a group morphism. Thus, $\forall{}h$, $F_{*,h}\of(L_{h})_{*,e}=(L_{F(h)})_{*,F(h)}\of{}F_{*,e}$ by the chain rule, and commutativity at the identity). We can apply this to any $A\in\mathfrak{h}$:
+	\[
+		F_{*,h}(\underbrace{(L_{h})_{*,e}(A)}_{=A^{\sharp}_{h}})=(L_{F(h)})_{*,F(e)}(F_{*,e}(A))=\underbrace{(L_{F(h)})_{*,e}(F_{*,e}(A))}_{=[F_{*,e}(A)]^{\sharp_{F(h)}}}
+	\]
+	This \i{is} the fact that $A^{\sharp}$ and $[F_{*,e}(A)]^{\sharp}$ are $F$-related.\proven
+}
+
+\par\noindent
+Now, back to subgroups.\n
+
+\defn{
+	A \u{regular} (or \u{embedded}) \u{Lie subgroup} of $G$ is a regular submanifold that is also a subgroup.\n
+}
+
+\cor{
+	If $H\subseteq{}G$ is a regular subgroup, then
+	\begin{enumerate}[leftmargin=4\parindent, label=(\alph*)]
+		\item $\mathfrak{h}\subset\mathfrak{g}$ as a subspace is closed under $\brack{\,\cdot\,,\,\cdot\,}$ of $\mathfrak{g}$.
+		\item $\forall{}A\in\mathfrak{h}$, $\underbrace{\exp}_{\ptxt{in }H}A=\underbrace{\exp}_{\ptxt{in }G}A$.
+	\end{enumerate}\up\n
+	Proof: Just apply the previous theorem to $F:H\hookrightarrow{}G$.\proven
+}
+
+\par\noindent
+Observe: $\forall{}A,B\in\mathfrak{h}$, $\brack{A,B}_{\mathfrak{h}}=\brack{A,B}_{\mathfrak{g}}$, so $\brack{\,\cdot\,,\,\cdot\,}_{\mathfrak{h}}=\restr{\brack{\,\cdot\,,\,\cdot\,}_{\mathfrak{g}}}{\mathfrak{h}}$.\n
+
+\defn{
+	Given a Lie algebra $\mathfrak{g}$, a \u{Lie-subalgebra} is a subspace $\mathfrak{h}\subset\mathfrak{g}$ which is closed under $\brack{\,\cdot\,,\,\cdot\,}$.\n
+}
+
+\cor{
+	If $H\subset{}G$ is a regular Lie subgroup, then $\mathfrak{h}=T_{e}H$ is a Lie-subalgebra of $\mathfrak{g}$.\n
+}
+
+\par\noindent
+Is the converse true? I.e., given $G$ a Lie group, if $\mathfrak{h}\subset{}T_{e}G=\mathfrak{g}$ is a Lie subalgebra of $\mathfrak{g}$, is there a Lie subgroup $H\subset{}G$ such that $T_{e}H=\mathfrak{h}$?\n
+Answer: Yes, if we allow immersed submanifolds.\n
+
+\thm{
+	If $\mathfrak{h}\subset{}T_{e}G$ is a Lie subalgebra, then there is a Lie group $H$ and an immersion $F:H\to{}G$ which is a group morphism and $F_{*,e}:T_{e}H\overset{\cong}{\to}\mathfrak{h}$.\n
+}
+
+\ex{
+	An irrational line on the two-torus $S^{1}\times{}S^{1}=\mathbb{T}^{2}$,
+	\[
+		\map{F:\R}{\mathbb{T}^{2}}{t}{(e^{it},e^{i\alpha{}t})}
+	\]
+	for $\alpha$ irrational, is a Lie group morphism and an immersion. $\im(F_{*,e})$ is a $1$-dimensional subspace of $\mathfrak{t}^{2}\cong\R^{2}$. This is always a subalgebra.\n
+}
+
+\par\noindent
+We're now done with Lie groups! Starting next week, we'll move on to differential forms.\n
+Motivation: How do we integrate on manifolds and submanifolds?\n
+(Think, for example, about surface integrals from calc 3.)
+
+\end{document}
