@@ -1,0 +1,553 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[intlimits]{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{ragged2e}
+\usepackage[letterpaper, margin=0.5in]{geometry}
+\usepackage{graphicx}
+\usepackage{cancel}
+\usepackage{mathtools}
+\usepackage{tabularx}
+\usepackage{arydshln}
+\usepackage{tensor}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage[boxed]{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{listings}
+\usepackage{textcomp}
+% \usepackage[pdf,tmpdir,singlefile]{graphviz}
+\usepackage{mathrsfs}
+\usepackage{bbm}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usepackage{enumitem}
+\usepackage{arydshln}
+\usepackage{relsize}
+\usepackage{multicol}
+\usepackage{scalerel}
+\usepackage{upgreek}
+\usepackage{wasysym}
+
+\usetikzlibrary{bayesnet}
+\setlist{noitemsep}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Formatting commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\n}{\hfill\break}
+\newcommand{\nn}{\vspace{0.5\baselineskip}\n}
+\newcommand{\up}{\vspace{-\baselineskip}}
+\newcommand{\hangblock}[2]{\par\noindent\settowidth{\hangindent}{\textbf{#1: }}\textbf{#1: }\nolinebreak#2}
+\newcommand{\lemma}[1]{\hangblock{Lemma}{#1}}
+\newcommand{\defn}[1]{\hangblock{Defn}{#1}}
+\newcommand{\thm}[1]{\hangblock{Thm}{#1}}
+\newcommand{\cor}[1]{\hangblock{Cor}{#1}}
+\newcommand{\prop}[1]{\hangblock{Prop}{#1}}
+\newcommand{\ex}[1]{\hangblock{Ex}{#1}}
+\newcommand{\exer}[1]{\hangblock{Exer}{#1}}
+\newcommand{\fact}[1]{\hangblock{Fact}{#1}}
+\newcommand{\remark}[1]{\hangblock{Remark}{#1}}
+\newcommand{\proven}{\;$\square$\n}
+\newcommand{\problem}[1]{\par\noindent{#1}\n}
+\newcommand{\problempart}[2]{\par\noindent\indent{}\settowidth{\hangindent}{\textbf{(#1)} \indent{}}\textbf{(#1) }\nolinebreak#2\n}
+\newcommand{\ptxt}[1]{\textrm{\textnormal{#1}}}
+\newcommand{\inlineeq}[1]{\centerline{$\displaystyle #1$}}
+\newcommand{\pageline}{\up\par\noindent\rule{\textwidth}{0.1pt}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Math commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set Theory
+\newcommand{\card}[1]{\left|#1\right|}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\setmid}{\;\middle|\;}
+\newcommand{\ps}[1]{\mathcal{P}\left(#1\right)}
+\newcommand{\pfinite}[1]{\mathcal{P}^{\ptxt{finite}}\left(#1\right)}
+\newcommand{\naturals}{\mathbb{N}}
+\newcommand{\N}{\naturals}
+\newcommand{\integers}{\mathbb{Z}}
+\newcommand{\Z}{\integers}
+\newcommand{\rationals}{\mathbb{Q}}
+\newcommand{\Q}{\rationals}
+\newcommand{\reals}{\mathbb{R}}
+\newcommand{\R}{\reals}
+\newcommand{\complex}{\mathbb{C}}
+\newcommand{\C}{\complex}
+\newcommand{\halfPlane}{\mathbb{H}}
+\let\HSym\H
+\let\H\relax
+\newcommand{\H}{\halfPlane}
+\newcommand{\comp}{^{\complement}}
+\DeclareMathOperator{\Hom}{Hom}
+\newcommand{\Ind}{\mathbbm{1}}
+\newcommand{\cut}{\setminus}
+\DeclareMathOperator{\elem}{elem}
+
+% Differentiable Manifolds
+\newcommand{\RP}{\mathbb{RP}}
+\newcommand{\CP}{\mathbb{RP}}
+\newcommand{\osubset}{\overset{\mathclap{\scalebox{0.5}{\ptxt{open}}}}{\subset}}
+\newcommand{\osubseteq}{\overset{\mathclap{\scalebox{0.5}{\ptxt{open}}}}{\subseteq}}
+\newcommand{\osupset}{\overset{\mathclap{\scalebox{0.5}{\ptxt{open}}}}{\supset}}
+\newcommand{\osupseteq}{\overset{\mathclap{\scalebox{0.5}{\ptxt{open}}}}{\supseteq}}
+\newcommand{\pdat}[3]{\left.\pd{#1}{#2}\right|_{#3}}
+\DeclareMathOperator{\so}{so}
+\DeclareMathOperator{\codim}{codim}
+\DeclareMathOperator{\Diff}{Diff}
+\let\dSym\d
+\let\d\relax
+\newcommand{\d}{\partial}
+\DeclareMathOperator{\gl}{gl}
+
+% Graph Theory
+\let\deg\relax
+\DeclareMathOperator{\deg}{deg}
+\newcommand{\degp}{\ptxt{deg}^{+}}
+\newcommand{\degn}{\ptxt{deg}^{-}}
+\newcommand{\precdot}{\mathrel{\ooalign{$\prec$\cr\hidewidth\hbox{$\cdot\mkern0.5mu$}\cr}}}
+\newcommand{\succdot}{\mathrel{\ooalign{$\cdot\mkern0.5mu$\cr\hidewidth\hbox{$\succ$}\cr\phantom{$\succ$}}}}
+\DeclareMathOperator{\cl}{cl}
+\DeclareMathOperator{\affdim}{affdim}
+
+% Probability
+\newcommand{\parSymbol}{\P}
+\newcommand{\Prob}{\mathbb{P}}
+\renewcommand{\P}{\Prob}
+\newcommand{\Avg}{\mathbb{E}}
+\newcommand{\E}{\Avg}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\cov}{cov}
+\DeclareMathOperator{\Unif}{Unif}
+\DeclareMathOperator{\Binom}{Binom}
+\newcommand{\CI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+
+% Standard Math
+\newcommand{\inv}{^{-1}}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\ceil}[1]{\left\lceil{}#1\right\rceil{}}
+\newcommand{\floor}[1]{\left\lfloor{}#1\right\rfloor{}}
+\newcommand{\conj}[1]{\overline{#1}}
+\newcommand{\of}{\circ}
+\newcommand{\tri}{\triangle}
+\newcommand{\inj}{\hookrightarrow}
+\newcommand{\surj}{\twoheadrightarrow}
+\newcommand{\ndiv}{\nmid}
+\renewcommand{\epsilon}{\varepsilon}
+\newcommand{\divides}{\mid}
+\newcommand{\ndivides}{\nmid}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\sgn}{sgn}
+\newcommand{\map}[4]{\!\!\!\begin{array}[t]{rcl}#1 & \!\!\!\!\to & \!\!\!\!#2\\ {}#3 & \!\!\!\!\mapsto & \!\!\!\!#4\end{array}}
+\newcommand{\bigsum}[2]{\smashoperator[lr]{\sum_{\scalebox{#1}{$#2$}}}}
+\DeclareMathOperator{\gcf}{gcf}
+\newcommand{\restr}[2]{\left.#1\right|_{#2}}
+
+% Linear Algebra
+\newcommand{\Id}{\textrm{\textnormal{Id}}}
+\newcommand{\im}{\textrm{\textnormal{im}}}
+\newcommand{\norm}[1]{\abs{\abs{#1}}}
+\newcommand{\tpose}{^{T}\!}
+\newcommand{\iprod}[1]{\left<#1\right>}
+\newcommand{\giprod}{\iprod{\;\,,\;}}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\trace}{tr}
+\newcommand{\chgBasMat}[3]{\!\!\tensor*[_{#1}]{\left[#2\right]}{_{#3}}}
+\newcommand{\vecBas}[2]{\tensor*[]{\left[#1\right]}{_{#2}}}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\Mat}{Mat}
+\DeclareMathOperator{\vspan}{span}
+\DeclareMathOperator{\rank}{rank}
+\newcommand{\V}[1]{\vec{#1}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator{\compProj}{comp}
+\DeclareMathOperator{\row}{row}
+\newcommand{\smallPMatrix}[1]{\paren{\begin{smallmatrix}#1\end{smallmatrix}}}
+\newcommand{\smallBMatrix}[1]{\brack{\begin{smallmatrix}#1\end{smallmatrix}}}
+\newcommand{\pmat}[1]{\begin{pmatrix}#1\end{pmatrix}}
+\newcommand{\bmat}[1]{\begin{bmatrix}#1\end{bmatrix}}
+\newcommand{\dual}{^{*}}
+\newcommand{\pinv}{^{\dagger}}
+\newcommand{\horizontalMatrixLine}{\ptxt{\rotatebox[origin=c]{-90}{$|$}}}
+\DeclareMathOperator{\range}{range}
+\DeclareMathOperator{\Symm}{Symm}
+\DeclareMathOperator{\SU}{SU}
+
+% Multilinear Algebra
+\let\Lsym\L
+\let\L\relax
+\DeclareMathOperator{\L}{\mathscr{L}}
+\DeclareMathOperator{\A}{\mathcal{A}}
+\DeclareMathOperator{\Alt}{Alt}
+\DeclareMathOperator{\Sym}{Sym}
+\newcommand{\ot}{\otimes}
+\newcommand{\ox}{\otimes}
+\DeclareMathOperator{\asc}{asc}
+\DeclareMathOperator{\asSet}{set}
+\DeclareMathOperator{\sort}{sort}
+\DeclareMathOperator{\ringA}{\mathring{A}}
+\DeclareMathOperator{\Sh}{Sh}
+
+% Topology
+\newcommand{\closure}[1]{\overline{#1}}
+\newcommand{\uball}{\mathcal{U}}
+\DeclareMathOperator{\Int}{Int}
+\DeclareMathOperator{\Ext}{Ext}
+\DeclareMathOperator{\Bd}{Bd}
+\DeclareMathOperator{\rInt}{rInt}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\ah}{ah}
+\newcommand{\LargerTau}{\mathlarger{\mathlarger{\mathlarger{\mathlarger{\tau}}}}}
+\newcommand{\Tau}{\mathcal{T}}
+
+% Analysis
+\DeclareMathOperator{\Graph}{Graph}
+\DeclareMathOperator{\epi}{epi}
+\DeclareMathOperator{\hypo}{hypo}
+\DeclareMathOperator{\supp}{supp}
+\newcommand{\lint}[2]{\underset{#1}{\overset{#2}{{\color{black}\underline{{\color{white}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\uint}[2]{\underset{#1}{\overset{#2}{{\color{white}\underline{{\color{black}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\alignint}[2]{\underset{#1}{\overset{#2}{{\color{white}\underline{{\color{white}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\extint}{\ptxt{ext}\int}
+\newcommand{\extalignint}[2]{\ptxt{ext}\alignint{#1}{#2}}
+\newcommand{\conv}{\ast}
+\newcommand{\pd}[2]{\frac{\partial{}#1}{\partial{}#2}}
+\newcommand{\del}{\nabla}
+\DeclareMathOperator{\grad}{grad}
+\DeclareMathOperator{\curl}{curl}
+\let\div\relax
+\DeclareMathOperator{\div}{div}
+\DeclareMathOperator{\vol}{vol}
+
+% Complex Analysis
+\let\Re\relax
+\DeclareMathOperator{\Re}{Re}
+\let\Im\relax
+\DeclareMathOperator{\Im}{Im}
+\DeclareMathOperator{\Res}{Res}
+
+% Abstract Algebra
+\DeclareMathOperator{\ord}{ord}
+\newcommand{\generated}[1]{\left<#1\right>}
+\newcommand{\cycle}[1]{\smallPMatrix{#1}}
+\newcommand{\id}{\ptxt{id}}
+\newcommand{\iso}{\cong}
+\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\SL}{SL}
+\DeclareMathOperator{\op}{op}
+\newcommand{\isom}[4]{\!\!\!\begin{array}[t]{rcl}#1 & \!\!\!\!\overset{\sim}{\to} & \!\!\!\!#2\\ #3 & \!\!\!\!\mapsto & \!\!\!\!#4\end{array}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\acts}{\;\reflectbox{\rotatebox[origin=c]{-90}{$\circlearrowright$}}\;}
+\newcommand{\disjunion}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+\DeclareMathOperator{\SO}{SO}
+\DeclareMathOperator{\stab}{stab}
+\DeclareMathOperator{\nullity}{nullity}
+\DeclareMathOperator{\Perm}{Perm}
+\DeclareMathOperator{\nsubgp}{\vartriangleleft}
+\DeclareMathOperator{\notnsubgp}{\ntriangleleft}
+\newcommand{\presentation}[2]{\left<#1\;\middle|\;#2\right>}
+\DeclareMathOperator{\Char}{char}
+\DeclareMathOperator{\fchar}{char}
+\DeclareMathOperator{\triv}{triv}
+\DeclareMathOperator{\reg}{reg}
+\DeclareMathOperator{\std}{std}
+\DeclareMathOperator{\Func}{Func}
+\DeclareMathOperator{\End}{End}
+
+% Convex Optimization
+\let\sectionSymbol\S
+\let\S\relax
+\newcommand{\S}{\mathbb{S}}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\ones}{\mathbbm{1}}
+\newcommand{\minimizeOver}[3]{\begin{array}{rl}\underset{#1}{\ptxt{minimize}} & #2\\ \ptxt{subject to} & #3\end{array}}
+\newcommand{\maximizeOver}[3]{\begin{array}{rl}\underset{#1}{\ptxt{maximize}} & #2\\ \ptxt{subject to} & #3\end{array}}
+\newcommand{\minimizationProblem}[2]{\minimizeOver{}{#1}{#2}}
+\newcommand{\maximizationProblem}[2]{\maximizeOver{}{#1}{#2}}
+\newcommand{\minimizeOverUnconstrained}[2]{\begin{array}{rl}\underset{#1}{\ptxt{minimize}} & #2\end{array}}
+\newcommand{\maximizeOverUnconstrained}[2]{\begin{array}{rl}\underset{#1}{\ptxt{maximize}} & #2\end{array}}
+\newcommand{\minimizationUnconstrained}[1]{\minimizeOverUnconstrained{}{#1}}
+\newcommand{\maximizationUnconstrained}[1]{\maximizeOverUnconstrained{}{#1}}
+\DeclareMathOperator{\argmin}{argmin}
+\DeclareMathOperator{\argmax}{argmax}
+
+% Proofs
+\newcommand{\st}{s.t.}
+\newcommand{\unique}{!}
+\newcommand{\iffdef}{\overset{\ptxt{def}}{\Leftrightarrow}}
+\newcommand{\eqVertical}{\rotatebox[origin=c]{90}{=}}
+\newcommand{\mapsfrom}{\mathrel{\reflectbox{\ensuremath{\mapsto}}}}
+\newcommand{\mapsdown}{\rotatebox[origin=c]{-90}{$\mapsto$}\mkern2mu}
+\newcommand{\mapsup}{\rotatebox[origin=c]{90}{$\mapsto$}\mkern2mu}
+\newcommand{\from}{\!\mathrel{\reflectbox{\ensuremath{\to}}}}
+\newcommand{\labeledeq}[1]{\overset{\mathclap{\ptxt{#1}}}{=}}
+\newcommand{\eqdef}{\labeledeq{def}}
+
+% Brackets
+\newcommand{\paren}[1]{\left(#1\right)}
+\renewcommand{\brack}[1]{\left[#1\right]}
+\renewcommand{\brace}[1]{\left\{#1\right\}}
+\newcommand{\ang}[1]{\left<#1\right>}
+
+% Algorithms
+\algrenewcommand{\algorithmiccomment}[1]{\hskip 1em \texttt{// #1}}
+\algrenewcommand\algorithmicrequire{\textbf{Input:}}
+\algrenewcommand\algorithmicensure{\textbf{Output:}}
+\newcommand{\algP}{\ptxt{\textbf{P}}}
+\newcommand{\algNP}{\ptxt{\textbf{NP}}}
+\newcommand{\algNPC}{\ptxt{\textbf{NP-Complete}}}
+\newcommand{\algNPH}{\ptxt{\textbf{NP-Hard}}}
+\newcommand{\algEXP}{\ptxt{\textbf{EXP}}}
+\DeclareMathOperator{\fl}{fl}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Other commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\flag}[1]{\textbf{\textcolor{red}{#1}}}
+\let\uSym\u
+\let\u\relax
+\newcommand{\u}[1]{\underline{#1}}
+\let\bSym\b
+\let\b\relax
+\newcommand{\b}[1]{\textbf{#1}}
+\let\iSym\i
+\let\i\relax
+\newcommand{\i}[1]{\textit{#1}}
+\let\scSym\sc
+\let\sc\relax
+\newcommand{\sc}[1]{\textsc{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Make l's curvy in math environments %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mathcode`l="8000
+\begingroup
+\makeatletter
+\lccode`\~=`\l
+\DeclareMathSymbol{\lsb@l}{\mathalpha}{letters}{`l}
+\lowercase{\gdef~{\ifnum\the\mathgroup=\m@ne \ell \else \lsb@l \fi}}%
+\endgroup
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% Fix \vdots and \ddots %
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{letltxmacro}
+\LetLtxMacro\orgvdots\vdots
+\LetLtxMacro\orgddots\ddots
+
+\makeatletter
+\DeclareRobustCommand\vdots{%
+	\mathpalette\@vdots{}%
+}
+\newcommand*{\@vdots}[2]{%
+	% #1: math style
+	% #2: unused
+	\sbox0{$#1\cdotp\cdotp\cdotp\m@th$}%
+	\sbox2{$#1.\m@th$}%
+	\vbox{%
+		\dimen@=\wd0 %
+		\advance\dimen@ -3\ht2 %
+		\kern.5\dimen@
+		% remove side bearings
+		\dimen@=\wd2 %
+		\advance\dimen@ -\ht2 %
+		\dimen2=\wd0 %
+		\advance\dimen2 -\dimen@
+		\vbox to \dimen2{%
+			\offinterlineskip
+			\copy2 \vfill\copy2 \vfill\copy2 %
+		}%
+	}%
+}
+\DeclareRobustCommand\ddots{%
+	\mathinner{%
+		\mathpalette\@ddots{}%
+		\mkern\thinmuskip
+	}%
+}
+\newcommand*{\@ddots}[2]{%
+	% #1: math style
+	% #2: unused
+	\sbox0{$#1\cdotp\cdotp\cdotp\m@th$}%
+	\sbox2{$#1.\m@th$}%
+	\vbox{%
+		\dimen@=\wd0 %
+		\advance\dimen@ -3\ht2 %
+		\kern.5\dimen@
+		% remove side bearings
+		\dimen@=\wd2 %
+		\advance\dimen@ -\ht2 %
+		\dimen2=\wd0 %
+		\advance\dimen2 -\dimen@
+		\vbox to \dimen2{%
+			\offinterlineskip
+			\hbox{$#1\mathpunct{.}\m@th$}%
+			\vfill
+			\hbox{$#1\mathpunct{\kern\wd2}\mathpunct{.}\m@th$}%
+			\vfill
+			\hbox{$#1\mathpunct{\kern\wd2}\mathpunct{\kern\wd2}\mathpunct{.}\m@th$}%
+		}%
+	}%
+}
+\makeatother
+
+\newcommand{\B}{
+	\begin{tikzpicture}
+	\filldraw [fill=red, draw=black] (0, 0) rectangle (0.37, 0.45);
+	\draw [line width=0.5mm, white ] (0.1,0.08) -- (0.1,0.38);
+	\draw[line width=0.5mm, white ] (0.1, 0.35) .. controls (0.2, 0.35) and (0.4, 0.2625) .. (0.1, 0.225);
+	\draw[line width=0.5mm, white ] (0.1, 0.225) .. controls (0.2, 0.225) and (0.4, 0.1625) .. (0.1, 0.1);
+	\end{tikzpicture}
+}
+
+% Allow custom symbols as arrows in tikz-cd
+\tikzset{
+  symbol/.style={
+    draw=none,
+    every to/.append style={
+      edge node={node [sloped, allow upside down, auto=false]{$#1$}}}
+  }
+}
+% Example: \arrow[r,symbol=\cong]
+% https://tex.stackexchange.com/questions/394154/how-to-include-inclusion-subgroup-relationship-in-tikz-cd-diagram
+
+\author{Thomas Cohn}
+\title{Math 591 Lecture 31}
+\date{11/13/20} % Can also use \today
+
+\begin{document}
+\maketitle
+\setlength\RaggedRightParindent{\parindent}
+\RaggedRight
+
+\par\noindent
+To do today:
+\begin{itemize}[topsep=0pt, itemsep=0pt]
+	\item Review differential forms
+	\item Pullbacks
+	\item Exterior derivatives
+\end{itemize}\up\n
+
+\par\noindent
+Let $M$ be a manifold. Last time, we defined a smooth $k$-form $\alpha$ on $M$ as an assignment $M\ni{}p\mapsto\alpha_{p}\in\bigwedge^{k}T^{*}_{p}M$.\n
+
+\par\noindent
+In local coordinates $(x^{1},\ldots,x^{n})$, $\alpha={\sum_{I}}'a_{I}dx^{I}$, $I=\set{i_{1}<\cdots<i_{k}}\subseteq\set{1,\ldots,n}$.\n
+
+\par\noindent
+Smoothness: $\forall{}I$, for any coordinate chart, the $a_{I}$ are $C^{\infty}$.\n
+
+\defn{
+	$\Omega^{k}(M)\eqdef\set{\ptxt{all $C^{\infty}$ $k$-forms}}$.\n
+}
+
+\ex{
+	On $\R^{n}$: volume form $dx^{1}\wedge\cdots\wedge{}dx^{n}$.\n
+	On $\R^{3}$: $\Omega^{1}=\set{\alpha=fdx+gdy+hdz}$.\n
+	\phantom{On $\R^{3}$: }$\Omega^{2}=\set{\alpha=fdx\wedge{}dy+gdy\wedge{}dz+hdx\wedge{}dz}$.\n
+}
+
+\defn{
+	Take $M\subseteq\R^{3}$ a surface such that ther is a smooth unit normal vector field $\vec{n}$ on $M$. Define a $2$-form $\sigma$ on $M$ by $\forall{}p\in{}M$, $v,w\in{}T_{p}M\subset\R^{3}$, $\sigma_{p}(v,w)=\det(v,w,\vec{n}_{p})$. So $\sigma_{p}(v,w)$ is the area of the parallelogram spanned by $v$, $w$, and $\vec{n}_{p}$. $\sigma$ is called the \u{area form} of $M$, for the given $\vec{n}$ (orientation).\n
+}
+
+\subsection*{Pull-backs of Differential Forms}
+
+\defn{
+	Let $F:N\to{}M$ be smooth, and $\alpha\in\Omega^{k}(M)$, We define the \u{pullback of $\alpha$ by $F$}, $(F^{*}\alpha)\in\Omega^{k}(N)$, by $\forall{}p\in{}N$, $v_{1},\ldots,v_{k}\in{}T_{p}N$,
+	\[
+		(F^{*}\alpha)_{p}(v_{1},\ldots,v_{k})=\alpha_{F(p)}(F_{*,p}(v_{1}),\ldots,F_{*,p}(v_{k}))
+	\]
+}
+
+\lemma{
+	\begin{enumerate}[leftmargin=4\parindent, topsep=0pt, itemsep=0pt]
+		\item $F^{*}\alpha$ is $C^{\infty}$.
+		\item $(F\of{}G)^{*}\alpha=G^{*}(F^{*}\alpha)$ (the chain rule).
+		\item $F^{*}(\alpha\wedge\beta)=(F^{*}\alpha)\wedge(F^{*}\beta)$.
+	\end{enumerate}\up\n
+}
+
+\par\noindent
+Observe: $\Omega^{0}(M)=C^{\infty}(M)$. If $f$ is a $0$-form on $M$, then $F^{*}f=f\of{}F$.\n
+
+\subsubsection*{Pullbacks in Coordinates}
+
+\par\noindent
+Given
+\[
+	\begin{tikzcd}
+		\R^{n} &[25pt] V\subset{}N \arrow[l, "(y^{1}{,}\ldots{,}y^{n})", swap] \arrow[r, "F"] & M\supset{}U \arrow[r, "(x^{1}{,}\ldots{,}x^{m})"] &[25pt] \R^{m}
+	\end{tikzcd}
+\]
+and $\alpha={\sum_{I}}'a_{I}dx^{I}$ with the $a_{I}\in{}C^{\infty}(U)$, then
+\[
+	F^{*}(\alpha)={\sum_{I}}'(a_{I}\of{}F)F^{*}(dx^{I})={\sum_{I}}'(a_{I}\of{}F)F^{*}(dx^{i_{1}}\wedge\cdots\wedge{}dx^{i_{k}})={\sum_{I}}'(a_{I}\of{}F)(F^{*}(dx^{i_{1}})\wedge\cdots\wedge{}F^{*}(dx^{i_{k}}))
+\]
+
+\newpage
+\lemma{
+	Let $F^{i}=x^{i}\of{}F:V\to\R$ for each $i$. Then $F^{*}(dx^{i})=dF^{i}$, the differential of $F^{i}$.\nn
+	Proof: First, introduce some shorthand notation: $\d_{y^{j}}=\pd{}{y^{j}}$. Now,
+	\[
+		F^{*}(dx^{i})(\d_{y^{j}})=dx^{i}(F_{*}\d_{y^{j}})\labeledeq{(1)}dx^{i}\sum_{l=1}^{m}\pd{F^{l}}{y^{j}}\d_{x^{l}}=F^{*}(dx^{i})(\d_{y^{j}})=\pd{F^{i}}{y^{j}}
+	\]
+	with (1) because $F'=\begin{pmatrix}\pd{F^{l}}{y^{j}}\end{pmatrix}_{(j,l)}$ is the matrix of $F_{*}$ in $(\d_{y^{j}}),(\d_{x^{i}})$. Thus,
+	\[
+		F^{*}(dx^{i})=\sum_{j=1}^{n}\pd{F^{i}}{y^{j}}dy^{j}=dF^{i}
+	\]
+	\proven
+}
+
+\par\noindent
+Now, back to the main computation:
+\[
+	F^{*}(\alpha)=\cdots={\sum_{I}}'(a_{I}\of{}F)(dF^{i_{1}}\wedge\cdots\wedge{}dF^{i_{k}})
+\]
+Observe: The right hand side is a smooth form. There's a special case for $k=m=n$:\n
+
+\prop{
+	$F^{*}(dx^{1}\wedge\cdots\wedge{}dx^{n})=\det\underbrace{\begin{pmatrix}\pd{F^{i}}{y^{j}}\end{pmatrix}_{(j,i)}}_{\mathclap{=F'=J(F)}}(dy^{1}\wedge\cdots\wedge{}dy^{n})$\nn
+	Proof: Well, the left hand side is
+	\[
+		dF^{1}\wedge\cdots\wedge{}dF^{n}=\underbrace{\paren{\sum_{j_{1}=1}^{n}\pd{F^{1}}{y^{j_{1}}}dy^{j_{1}}}}_{dF^{1}}\wedge\cdots\wedge\underbrace{\paren{\sum_{j_{n}=1}^{n}\pd{F^{n}}{y^{j_{n}}}dy^{j_{n}}}}_{dF^{n}}=\sum_{\hspace{-3em}\mathrlap{j_{1},\ldots,j_{n}=1}}^{n}\;\;\;\;\paren{\prod_{i=1}^{n}\pd{F^{i}}{y^{j_{i}}}}(dy^{j_{1}}\wedge\cdots\wedge{}dy^{j_{n}})
+	\]
+	Observe that the terms of the sum with $j_{a}=j_{b}$ with $a\ne{}b$ vanish, so the sum is really over all orderings of $\set{1,\ldots,n}$.
+	\[
+		dF^{1}\wedge\cdots\wedge{}dF^{n}=\sum_{\sigma\in{}S_{n}}\paren{\prod_{i=1}^{n}\pd{F^{i}}{y^{\sigma(i)}}}\underbrace{\paren{dy^{\sigma(1)},\ldots,dy^{\sigma(n)}}}_{=\underbrace{(-1)^{\sigma}}_{\sgn(\sigma)}dy^{1}\wedge\cdots\wedge{}dy^{n}}=\underbrace{\paren{\sum_{\sigma\in{}S_{n}}(-1)^{\sigma}\prod_{i=1}^{n}\pd{F^{i}}{y^{\sigma(i)}}}}_{\det{}F'}\paren{dy^{1}\wedge\cdots\wedge{}dy^{n}}
+	\]
+	\proven
+}
+
+\cor{
+	If $\alpha=fdx^{1}\wedge\cdots\wedge{}dx^{n}$ on $\R^{n}$, $f\in{}C^{\infty}_{0}(U)$ (i.e. $f$ has compact support), and we define
+	\[
+		\int\alpha=\underbrace{\int{}fdx^{1}\wedge\cdots\wedge{}dx^{n}}_{\ptxt{Riemann Integral}}
+	\]
+	Then $\int{}F^{*}\alpha=\int\alpha$ by the change of variables formula, provided that $\det(F')>0$.\nn
+	Proof: $F^{*}\alpha=(f\of{}F)\det(F')dy^{1}\wedge\cdots\wedge{}dy^{n}$.\proven
+}
+
+\newpage
+\subsection*{The Exterior Differential}
+
+\thm{
+	Let $M$ be a manifold. Then there exists a unique operator $d$
+	\[
+		\Omega^{0}\overset{d}{\xrightarrow{\hspace{0.5cm}}}\Omega^{1}\overset{d}{\xrightarrow{\hspace{0.5cm}}}\Omega^{2}\overset{d}{\xrightarrow{\hspace{0.5cm}}}\cdots\overset{d}{\xrightarrow{\hspace{0.5cm}}}\Omega^{k-1}\overset{d}{\xrightarrow{\hspace{0.5cm}}}\Omega^{k}
+	\]
+	\st{}
+	\begin{enumerate}[itemsep=0pt, topsep=0pt, leftmargin=4\parindent, label=(\arabic*)]
+		\item $d$ is $\R$-linear.
+		\item $d:\Omega^{0}\to\Omega^{1}$ is the usual differential of a function.
+		\item $d^{2}=0$.
+		\item The anti-derivation property: $d(\alpha\wedge\beta)=d\alpha\wedge\beta+(-1)^{\deg\alpha}\alpha\wedge{}d\beta$. (This is also known as the super-symmetric version of Leibniz' rule.)
+		\item If $F:M\to{}N$ is smooth, then $\forall\alpha\in\Omega^{k}N$, $d(F^{*}\alpha)=F^{*}(d\alpha)$. (This property is called ``Naturality''.)
+	\end{enumerate}\up\nn
+	Proof: Next time...
+}
+
+\end{document}
