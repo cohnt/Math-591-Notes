@@ -1,0 +1,567 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[intlimits]{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{ragged2e}
+\usepackage[letterpaper, margin=0.5in]{geometry}
+\usepackage{graphicx}
+\usepackage{cancel}
+\usepackage{mathtools}
+\usepackage{tabularx}
+\usepackage{arydshln}
+\usepackage{tensor}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage[boxed]{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{listings}
+\usepackage{textcomp}
+% \usepackage[pdf,tmpdir,singlefile]{graphviz}
+\usepackage{mathrsfs}
+\usepackage{bbm}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usepackage{enumitem}
+\usepackage{arydshln}
+\usepackage{relsize}
+\usepackage{multicol}
+\usepackage{scalerel}
+\usepackage{upgreek}
+% \usepackage{wasysym}
+\usepackage{ifthen}
+
+\usetikzlibrary{bayesnet}
+\setlist{noitemsep}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Formatting commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\n}{\hfill\break}
+\newcommand{\nn}{\vspace{0.5\baselineskip}\n}
+\newcommand{\up}{\vspace{-\baselineskip}}
+\newcommand{\hangblock}[2]{\par\noindent\settowidth{\hangindent}{\textbf{#1: }}\textbf{#1: }\nolinebreak#2}
+\newcommand{\lemma}[1]{\hangblock{Lemma}{#1}}
+\newcommand{\defn}[1]{\hangblock{Defn}{#1}}
+\newcommand{\thm}[1]{\hangblock{Thm}{#1}}
+\newcommand{\cor}[1]{\hangblock{Cor}{#1}}
+\newcommand{\prop}[1]{\hangblock{Prop}{#1}}
+\newcommand{\ex}[1]{\hangblock{Ex}{#1}}
+\newcommand{\exer}[1]{\hangblock{Exer}{#1}}
+\newcommand{\fact}[1]{\hangblock{Fact}{#1}}
+\newcommand{\remark}[1]{\hangblock{Remark}{#1}}
+\newcommand{\proven}{\;$\square$\n}
+\newcommand{\problem}[1]{\par\noindent{\nolinebreak#1}\n}
+\newcommand{\problempart}[2]{\par\noindent\indent{}\settowidth{\hangindent}{\textbf{(#1)} \indent{}}\textbf{(#1) }\nolinebreak#2\n}
+\newcommand{\ptxt}[1]{\textrm{\textnormal{#1}}}
+\newcommand{\inlineeq}[1]{\centerline{$\displaystyle #1$}}
+\newcommand{\pageline}{\up\par\noindent\rule{\textwidth}{0.1pt}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Math commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set Theory
+\newcommand{\card}[1]{\left|#1\right|}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\setmid}{\;\middle|\;}
+\newcommand{\ps}[1]{\mathcal{P}\left(#1\right)}
+\newcommand{\pfinite}[1]{\mathcal{P}^{\ptxt{finite}}\left(#1\right)}
+\newcommand{\naturals}{\mathbb{N}}
+\newcommand{\N}{\naturals}
+\newcommand{\integers}{\mathbb{Z}}
+\newcommand{\Z}{\integers}
+\newcommand{\rationals}{\mathbb{Q}}
+\newcommand{\Q}{\rationals}
+\newcommand{\reals}{\mathbb{R}}
+\newcommand{\R}{\reals}
+\newcommand{\complex}{\mathbb{C}}
+\newcommand{\C}{\complex}
+\newcommand{\halfPlane}{\mathbb{H}}
+\let\HSym\H
+\let\H\relax
+\newcommand{\H}{\halfPlane}
+\newcommand{\comp}{^{\complement}}
+\DeclareMathOperator{\Hom}{Hom}
+\newcommand{\Ind}{\mathbbm{1}}
+\newcommand{\cut}{\setminus}
+\DeclareMathOperator{\elem}{elem}
+
+% Differentiable Manifolds
+\newcommand{\RP}{\mathbb{RP}}
+\newcommand{\CP}{\mathbb{RP}}
+\newcommand{\osubset}{\overset{\mathclap{\scalebox{0.5}{\ptxt{open}}}}{\subset}}
+\newcommand{\osubseteq}{\overset{\mathclap{\scalebox{0.5}{\ptxt{open}}}}{\subseteq}}
+\newcommand{\osupset}{\overset{\mathclap{\scalebox{0.5}{\ptxt{open}}}}{\supset}}
+\newcommand{\osupseteq}{\overset{\mathclap{\scalebox{0.5}{\ptxt{open}}}}{\supseteq}}
+\newcommand{\pdat}[3]{\left.\pd{#1}{#2}\right|_{#3}}
+\DeclareMathOperator{\so}{so}
+\DeclareMathOperator{\codim}{codim}
+\DeclareMathOperator{\Diff}{Diff}
+\let\dSym\d
+\let\d\relax
+\newcommand{\d}{\partial}
+\DeclareMathOperator{\gl}{gl}
+
+% Graph Theory
+\let\deg\relax
+\DeclareMathOperator{\deg}{deg}
+\newcommand{\degp}{\ptxt{deg}^{+}}
+\newcommand{\degn}{\ptxt{deg}^{-}}
+\newcommand{\precdot}{\mathrel{\ooalign{$\prec$\cr\hidewidth\hbox{$\cdot\mkern0.5mu$}\cr}}}
+\newcommand{\succdot}{\mathrel{\ooalign{$\cdot\mkern0.5mu$\cr\hidewidth\hbox{$\succ$}\cr\phantom{$\succ$}}}}
+\DeclareMathOperator{\cl}{cl}
+\DeclareMathOperator{\affdim}{affdim}
+
+% Probability
+\newcommand{\parSymbol}{\P}
+\newcommand{\Prob}{\mathbb{P}}
+\renewcommand{\P}{\Prob}
+\newcommand{\Avg}{\mathbb{E}}
+\newcommand{\E}{\Avg}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\cov}{cov}
+\DeclareMathOperator{\Unif}{Unif}
+\DeclareMathOperator{\Binom}{Binom}
+\newcommand{\CI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+
+% Standard Math
+\newcommand{\inv}{^{-1}}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\ceil}[1]{\left\lceil{}#1\right\rceil{}}
+\newcommand{\floor}[1]{\left\lfloor{}#1\right\rfloor{}}
+\newcommand{\conj}[1]{\overline{#1}}
+\newcommand{\of}{\circ}
+\newcommand{\tri}{\triangle}
+\newcommand{\inj}{\hookrightarrow}
+\newcommand{\surj}{\twoheadrightarrow}
+\newcommand{\ndiv}{\nmid}
+\renewcommand{\epsilon}{\varepsilon}
+\newcommand{\divides}{\mid}
+\newcommand{\ndivides}{\nmid}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\sgn}{sgn}
+\newcommand{\map}[4]{\!\!\!\begin{array}[t]{rcl}#1 & \!\!\!\!\to & \!\!\!\!#2\\ {}#3 & \!\!\!\!\mapsto & \!\!\!\!#4\end{array}}
+\newcommand{\bigsum}[2]{\smashoperator[lr]{\sum_{\scalebox{#1}{$#2$}}}}
+\DeclareMathOperator{\gcf}{gcf}
+\newcommand{\restr}[2]{\left.#1\right|_{#2}}
+
+% Linear Algebra
+\newcommand{\Id}{\textrm{\textnormal{Id}}}
+\newcommand{\im}{\textrm{\textnormal{im}}}
+\newcommand{\norm}[1]{\abs{\abs{#1}}}
+\newcommand{\tpose}{^{T}\!}
+\newcommand{\iprod}[1]{\left<#1\right>}
+\newcommand{\giprod}{\iprod{\;\,,\;}}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\trace}{tr}
+\newcommand{\chgBasMat}[3]{\!\!\tensor*[_{#1}]{\left[#2\right]}{_{#3}}}
+\newcommand{\vecBas}[2]{\tensor*[]{\left[#1\right]}{_{#2}}}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\Mat}{Mat}
+\DeclareMathOperator{\vspan}{span}
+\DeclareMathOperator{\rank}{rank}
+\newcommand{\V}[1]{\vec{#1}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator{\compProj}{comp}
+\DeclareMathOperator{\row}{row}
+\newcommand{\smallPMatrix}[1]{\paren{\begin{smallmatrix}#1\end{smallmatrix}}}
+\newcommand{\smallBMatrix}[1]{\brack{\begin{smallmatrix}#1\end{smallmatrix}}}
+\newcommand{\pmat}[1]{\begin{pmatrix}#1\end{pmatrix}}
+\newcommand{\bmat}[1]{\begin{bmatrix}#1\end{bmatrix}}
+\newcommand{\dual}{^{*}}
+\newcommand{\pinv}{^{\dagger}}
+\newcommand{\horizontalMatrixLine}{\ptxt{\rotatebox[origin=c]{-90}{$|$}}}
+\DeclareMathOperator{\range}{range}
+\DeclareMathOperator{\Symm}{Symm}
+\DeclareMathOperator{\SU}{SU}
+
+% Multilinear Algebra
+\let\Lsym\L
+\let\L\relax
+\DeclareMathOperator{\L}{\mathscr{L}}
+\DeclareMathOperator{\A}{\mathcal{A}}
+\DeclareMathOperator{\Alt}{Alt}
+\DeclareMathOperator{\Sym}{Sym}
+\newcommand{\ot}{\otimes}
+\newcommand{\ox}{\otimes}
+\DeclareMathOperator{\asc}{asc}
+\DeclareMathOperator{\asSet}{set}
+\DeclareMathOperator{\sort}{sort}
+\DeclareMathOperator{\ringA}{\mathring{A}}
+\DeclareMathOperator{\Sh}{Sh}
+
+% Topology
+\newcommand{\closure}[1]{\overline{#1}}
+\newcommand{\uball}{\mathcal{U}}
+\DeclareMathOperator{\Int}{Int}
+\DeclareMathOperator{\Ext}{Ext}
+\DeclareMathOperator{\Bd}{Bd}
+\DeclareMathOperator{\rInt}{rInt}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\ah}{ah}
+\newcommand{\LargerTau}{\mathlarger{\mathlarger{\mathlarger{\mathlarger{\tau}}}}}
+\newcommand{\Tau}{\mathcal{T}}
+
+% Analysis
+\DeclareMathOperator{\Graph}{Graph}
+\DeclareMathOperator{\epi}{epi}
+\DeclareMathOperator{\hypo}{hypo}
+\DeclareMathOperator{\supp}{supp}
+\newcommand{\lint}[2]{\underset{#1}{\overset{#2}{{\color{black}\underline{{\color{white}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\uint}[2]{\underset{#1}{\overset{#2}{{\color{white}\underline{{\color{black}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\alignint}[2]{\underset{#1}{\overset{#2}{{\color{white}\underline{{\color{white}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\extint}{\ptxt{ext}\int}
+\newcommand{\extalignint}[2]{\ptxt{ext}\alignint{#1}{#2}}
+\newcommand{\conv}{\ast}
+\newcommand{\pd}[2]{\frac{\partial{}#1}{\partial{}#2}}
+\newcommand{\del}{\nabla}
+\DeclareMathOperator{\grad}{grad}
+\DeclareMathOperator{\curl}{curl}
+\let\div\relax
+\DeclareMathOperator{\div}{div}
+\DeclareMathOperator{\vol}{vol}
+
+% Complex Analysis
+\let\Re\relax
+\DeclareMathOperator{\Re}{Re}
+\let\Im\relax
+\DeclareMathOperator{\Im}{Im}
+\DeclareMathOperator{\Res}{Res}
+
+% Abstract Algebra
+\DeclareMathOperator{\ord}{ord}
+\newcommand{\generated}[1]{\left<#1\right>}
+\newcommand{\cycle}[1]{\smallPMatrix{#1}}
+\newcommand{\id}{\ptxt{id}}
+\newcommand{\iso}{\cong}
+\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\SL}{SL}
+\DeclareMathOperator{\op}{op}
+\newcommand{\isom}[4]{\!\!\!\begin{array}[t]{rcl}#1 & \!\!\!\!\overset{\sim}{\to} & \!\!\!\!#2\\ #3 & \!\!\!\!\mapsto & \!\!\!\!#4\end{array}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\acts}{\;\reflectbox{\rotatebox[origin=c]{-90}{$\circlearrowright$}}\;}
+\newcommand{\disjunion}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+\DeclareMathOperator{\SO}{SO}
+\DeclareMathOperator{\stab}{stab}
+\DeclareMathOperator{\nullity}{nullity}
+\DeclareMathOperator{\Perm}{Perm}
+\DeclareMathOperator{\nsubgp}{\vartriangleleft}
+\DeclareMathOperator{\notnsubgp}{\ntriangleleft}
+\newcommand{\presentation}[2]{\left<#1\;\middle|\;#2\right>}
+\DeclareMathOperator{\Char}{char}
+\DeclareMathOperator{\fchar}{char}
+\DeclareMathOperator{\triv}{triv}
+\DeclareMathOperator{\reg}{reg}
+\DeclareMathOperator{\std}{std}
+\DeclareMathOperator{\Func}{Func}
+\DeclareMathOperator{\End}{End}
+
+% Convex Optimization
+\let\sectionSymbol\S
+\let\S\relax
+\newcommand{\S}{\mathbb{S}}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\ones}{\mathbbm{1}}
+\newcommand{\minimizeOver}[3]{\begin{array}{rl}\underset{#1}{\ptxt{minimize}} & #2\\ \ptxt{subject to} & #3\end{array}}
+\newcommand{\maximizeOver}[3]{\begin{array}{rl}\underset{#1}{\ptxt{maximize}} & #2\\ \ptxt{subject to} & #3\end{array}}
+\newcommand{\minimizationProblem}[2]{\minimizeOver{}{#1}{#2}}
+\newcommand{\maximizationProblem}[2]{\maximizeOver{}{#1}{#2}}
+\newcommand{\minimizeOverUnconstrained}[2]{\begin{array}{rl}\underset{#1}{\ptxt{minimize}} & #2\end{array}}
+\newcommand{\maximizeOverUnconstrained}[2]{\begin{array}{rl}\underset{#1}{\ptxt{maximize}} & #2\end{array}}
+\newcommand{\minimizationUnconstrained}[1]{\minimizeOverUnconstrained{}{#1}}
+\newcommand{\maximizationUnconstrained}[1]{\maximizeOverUnconstrained{}{#1}}
+\DeclareMathOperator{\argmin}{argmin}
+\DeclareMathOperator{\argmax}{argmax}
+
+% Proofs
+\newcommand{\st}{s.t.}
+\newcommand{\unique}{!}
+\newcommand{\iffdef}{\overset{\ptxt{def}}{\Leftrightarrow}}
+\newcommand{\eqVertical}{\rotatebox[origin=c]{90}{=}}
+\newcommand{\mapsfrom}{\mathrel{\reflectbox{\ensuremath{\mapsto}}}}
+\newcommand{\mapsdown}{\rotatebox[origin=c]{-90}{$\mapsto$}\mkern2mu}
+\newcommand{\mapsup}{\rotatebox[origin=c]{90}{$\mapsto$}\mkern2mu}
+\newcommand{\from}{\!\mathrel{\reflectbox{\ensuremath{\to}}}}
+\newcommand{\labeledeq}[1]{\overset{\mathclap{\ptxt{#1}}}{=}}
+\newcommand{\eqdef}{\labeledeq{def}}
+
+% Brackets
+\newcommand{\paren}[1]{\left(#1\right)}
+\renewcommand{\brack}[1]{\left[#1\right]}
+\renewcommand{\brace}[1]{\left\{#1\right\}}
+\newcommand{\ang}[1]{\left<#1\right>}
+
+% Algorithms
+\algrenewcommand{\algorithmiccomment}[1]{\hskip 1em \texttt{// #1}}
+\algrenewcommand\algorithmicrequire{\textbf{Input:}}
+\algrenewcommand\algorithmicensure{\textbf{Output:}}
+\newcommand{\algP}{\ptxt{\textbf{P}}}
+\newcommand{\algNP}{\ptxt{\textbf{NP}}}
+\newcommand{\algNPC}{\ptxt{\textbf{NP-Complete}}}
+\newcommand{\algNPH}{\ptxt{\textbf{NP-Hard}}}
+\newcommand{\algEXP}{\ptxt{\textbf{EXP}}}
+\DeclareMathOperator{\fl}{fl}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Other commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\flag}[1]{\textbf{\textcolor{red}{#1}}}
+\let\uSym\u
+\let\u\relax
+\newcommand{\u}[1]{\underline{#1}}
+\let\bSym\b
+\let\b\relax
+\newcommand{\b}[1]{\textbf{#1}}
+\let\iSym\i
+\let\i\relax
+\newcommand{\i}[1]{\textit{#1}}
+\let\scSym\sc
+\let\sc\relax
+\newcommand{\sc}[1]{\textsc{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Make l's curvy in math environments %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mathcode`l="8000
+\begingroup
+\makeatletter
+\lccode`\~=`\l
+\DeclareMathSymbol{\lsb@l}{\mathalpha}{letters}{`l}
+\lowercase{\gdef~{\ifnum\the\mathgroup=\m@ne \ell \else \lsb@l \fi}}%
+\endgroup
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% Fix \vdots and \ddots %
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{letltxmacro}
+\LetLtxMacro\orgvdots\vdots
+\LetLtxMacro\orgddots\ddots
+
+\makeatletter
+\DeclareRobustCommand\vdots{%
+	\mathpalette\@vdots{}%
+}
+\newcommand*{\@vdots}[2]{%
+	% #1: math style
+	% #2: unused
+	\sbox0{$#1\cdotp\cdotp\cdotp\m@th$}%
+	\sbox2{$#1.\m@th$}%
+	\vbox{%
+		\dimen@=\wd0 %
+		\advance\dimen@ -3\ht2 %
+		\kern.5\dimen@
+		% remove side bearings
+		\dimen@=\wd2 %
+		\advance\dimen@ -\ht2 %
+		\dimen2=\wd0 %
+		\advance\dimen2 -\dimen@
+		\vbox to \dimen2{%
+			\offinterlineskip
+			\copy2 \vfill\copy2 \vfill\copy2 %
+		}%
+	}%
+}
+\DeclareRobustCommand\ddots{%
+	\mathinner{%
+		\mathpalette\@ddots{}%
+		\mkern\thinmuskip
+	}%
+}
+\newcommand*{\@ddots}[2]{%
+	% #1: math style
+	% #2: unused
+	\sbox0{$#1\cdotp\cdotp\cdotp\m@th$}%
+	\sbox2{$#1.\m@th$}%
+	\vbox{%
+		\dimen@=\wd0 %
+		\advance\dimen@ -3\ht2 %
+		\kern.5\dimen@
+		% remove side bearings
+		\dimen@=\wd2 %
+		\advance\dimen@ -\ht2 %
+		\dimen2=\wd0 %
+		\advance\dimen2 -\dimen@
+		\vbox to \dimen2{%
+			\offinterlineskip
+			\hbox{$#1\mathpunct{.}\m@th$}%
+			\vfill
+			\hbox{$#1\mathpunct{\kern\wd2}\mathpunct{.}\m@th$}%
+			\vfill
+			\hbox{$#1\mathpunct{\kern\wd2}\mathpunct{\kern\wd2}\mathpunct{.}\m@th$}%
+		}%
+	}%
+}
+\makeatother
+
+\newcommand{\B}{
+	\begin{tikzpicture}
+	\filldraw [fill=red, draw=black] (0, 0) rectangle (0.37, 0.45);
+	\draw [line width=0.5mm, white ] (0.1,0.08) -- (0.1,0.38);
+	\draw[line width=0.5mm, white ] (0.1, 0.35) .. controls (0.2, 0.35) and (0.4, 0.2625) .. (0.1, 0.225);
+	\draw[line width=0.5mm, white ] (0.1, 0.225) .. controls (0.2, 0.225) and (0.4, 0.1625) .. (0.1, 0.1);
+	\end{tikzpicture}
+}
+
+% Allow custom symbols as arrows in tikz-cd
+\tikzset{
+  symbol/.style={
+    draw=none,
+    every to/.append style={
+      edge node={node [sloped, allow upside down, auto=false]{$#1$}}}
+  }
+}
+% Example: \arrow[r,symbol=\cong]
+% https://tex.stackexchange.com/questions/394154/how-to-include-inclusion-subgroup-relationship-in-tikz-cd-diagram
+
+\author{Thomas Cohn}
+\title{Math 591 Lecture 37}
+\date{12/4/20} % Can also use \today
+
+\begin{document}
+\maketitle
+\setlength\RaggedRightParindent{\parindent}
+\RaggedRight
+
+\par\noindent
+Briefly, think back to integration of forms. Observe:
+\[
+	\int_{M}\mu=\sum_{\alpha}\int(\phi_{\alpha}\inv)^{*}(\chi_{\alpha}\mu)
+\]
+We claimed (without proof) that this sum has finitely-many nonzero summands.\nn
+Proof: Let $K=\supp\mu$ (note that $K$ must be compact), and $U_{\alpha}=\supp\chi_{\alpha}$. Note that $\set{U_{\alpha}}$ is locally finite: $\forall{}p\in{}K$, $\exists{}V_{p}$, a neighborhood of $p$, such that $\set{\alpha\mid{}V_{p}\cap{}U_{\alpha}\ne\emptyset}$ is finite. Also, $\set{V_{p}}_{p\in{}K}$ is naturally a cover of $K$, so by compactnes, $\exists{}p_{1},\ldots,p_{n}\in{}K$ \st{} $\set{V_{p_{1}},\ldots,V_{p_{n}}}$ is a cover of $K$. Finally,
+\[
+	\set{\alpha\mid{}K\cap{}U_{\alpha}\ne\emptyset}\subset\bigcup_{j=1}^{n}\underbrace{\set{\alpha\mid{}V_{p_{j}}\cap{}U_{\alpha}\ne\emptyset}}_{\ptxt{finite}}
+\]
+\proven
+
+\par\noindent
+Now, we return to working with manifolds with boundary...\n
+
+\par\noindent
+The principle is that all definitions on manifold with boundary are exact analogues to the case where $\d{}M=\emptyset$. The key difference is the model spaces are open subsets of $\H^{n}=\set{x^{n}\ge{}0}\subseteq\R^{n}$, and transition maps are diffeomorphisms between open subsets of $\H^{n}$ (which carry boundary points to boundary points, and restrict to diffeomorphisms between open sets of $\d\H^{n}\cong\R^{n-1}$).\n
+
+\ex{
+	Notions of smoothness. $f:M\to\R$ is smooth iff for any chart $\phi_{\alpha}$, $f_{\alpha}=f\of\phi_{\alpha}\inv:U\to\R$ is smooth (with $U\osubseteq\H^{n}$). In case $U\cap\d\H^{n}\ne\emptyset$, smoothness of $f_{\alpha}:U\to\R$ means $\exists\tilde{f}_{\alpha}:\tilde{U}_{\alpha}\to\R$, a smooth extension of $f_{\alpha}$ to $\tilde{U}_{\alpha}\osubseteq\R^{n}$. Then $U=\tilde{U}_{\alpha}\cap\H^{n}$.\n
+}
+
+\ex{
+	Existence of partitions of unity, just as before.\n
+}
+
+\section*{Tangent Spaces}
+
+\par\noindent
+$\forall{}p\in\d{}M$, $T_{p}M$ is still $n$-dimensional, and is still spanned by $\set{\pd{}{x^{1}},\ldots,\pd{}{x^{n}}}$. $\pd{}{x^{n}}$ is well-defined on smooth functions, because such functions extend across the boundary, and last time, we showed the choice of extension doesn't matter.\n
+
+\par\noindent
+Note: $\d{}M$ inherits a $C^{\infty}$ manifold structure, by restricting charts of $M$.\n
+
+\par\noindent
+$\forall{}p\in\d{}M$, $T_{p}(\d{}M)\overset{\iota_{*,p}}{\hookrightarrow}T_{p}M$, where $\iota:\d{}M\to{}M$ is the inclusion. Identify $T_{p}(\d{}M)\subset{}T_{p}M$ as a subspace -- the image of $\iota_{*,p}$. It's a hyperplane, i.e., $T_{p}(\d{}M)$ has codimension $1$.\n
+
+\par\noindent
+Note: $(T_{p}M)\cut(T_{p}\d{}M)$ has two components: ``inward-pointing'' vectors and ``outward-pointing'' vectors.\n
+
+\par\noindent
+How do we characterize outward-pointing vectors? Well, say $p\in\d{}M$. Let $\gamma:(-\varepsilon,0]\to{}M$ smooth with $\gamma(0)=p$. Then define $\dot\gamma(0)$ to be outward pointing.\n
+
+\subsection*{Orientation of Manifolds with Boundary}
+
+\par\noindent
+Once again, this is an exact analogue of manifolds without boundary. $\forall{}p\in{}M$, $T_{p}M$ has dimension $n$, two orientations, etc.\n
+
+\lemma{
+	If $M$ is orientable, then $\d{}M$ is orientable.\n
+}
+
+\par\noindent
+By convention, $\forall{}p\in\d{}M$, a basis $\paren{b_{1},\ldots,b_{n-1}}$ of $T_{p}(\d{}M)$ is positive iff $\paren{\nu,b_{1},\ldots,b_{n-1}}$ is a positive basis of $T_{p}M$, \i{for any outward-pointing $\nu\in{}T_{p}M$}. This defines the boundary's orientation.\n
+
+\ex{
+	Say $M=\H^{n}$, oriented such that $\set{\pd{}{x^{1}},\ldots,\pd{}{x^{n}}}$ is positive. What is the boundary orientation?\nn
+	For $n=2$, $\set{\pd{}{x^{1}},\pd{}{x^{2}}}$ is positive. So if $\nu$ is outward-pointing, $\set{\nu,\pd{}{x^{2}}}$ is positive, so $\set{\pd{}{x^{1}}}$ is positive on $\d\H^{2}\cong\R$.\n
+	For $n=3$, is $(\vec{i},\vec{j})$ positive? Look at $v=-\vec{k}$ -- $(-\vec{k},\vec{i},\vec{j})$ is negative. So we claim that $\d\H^{n}$ is $(-1)^{n}$ times the standard orientation of $\R^{n}$.\n
+}
+
+\section*{Stokes' Theorem}
+
+\thm{
+	(Stokes' Theorem) Let $M$ be a manifold (possibly with boundary). Let $\mu\in\Omega_{0}^{n-1}(M)$. Assume $M$ is oriented; give $\d{}M$ the boundary orientation. Then
+	\[
+		\int_{\d{}M}\iota^{*}\mu=\int_{M}d\mu
+	\]
+	(where $\iota:\d{}M\hookrightarrow{}M$ is the inclusion map). One often omits the $\iota^{*}$, so we say
+	\[
+		\int_{\d{}M}\mu=\int_{M}d\mu
+	\]
+	(If $\d{}M=\emptyset$, then $\int_{M}d\mu=0$.)\n
+}
+
+\par\noindent
+Observe: $\iota^{*}\mu$ is a top degree form on the boundary.\n
+
+\ex{
+	$M=[a,b]$, $n=1$, $\mu\in\Omega_{0}^{0}(M)\cong{}C^{\infty}(M)$. Then $\int_{\d{}M}\mu=\mu(b)-\mu(a)=\int_{M}df$. The ``$-$'' sign comes because of the orientation of $\d{}M$ is outward-pointing.\n
+}
+
+\ex{
+	$n=2$. Then we get Green's Theorem:\n
+	$\mu=P\,dx+Q\,dy$. $d\mu=(Q_{x}-P_{y})\,dx\wedge{}dy$.\n
+	The orientation on $\d{}M$ comes from the right-hand rule.
+	\[
+		\int_{\d{}M}P\,dx+Q\,dy=\iint_{M}(Q_{x}-P_{y})\,dx\wedge{}dy
+	\]
+	\n
+}
+
+\exer{
+	For $n=3$, we get the usual Stokes' theorem.\n
+}
+
+\subsection*{Proof of Stokes' Theorem}
+
+\par\noindent
+First, assume it holds for $\H^{n}$. Then it follows for $\mu\in\Omega_{0}^{n-1}(M)$ if $\mu$ is supported in the domain of a chart $\phi$:
+\[
+	\int_{\d{}M}\mu=\int_{\d\H^{n}}(\phi\inv)^{*}\iota^{*}\mu\labeledeq{(1)}\int_{\H^{n}}d(\phi\inv)^{*}\mu=\int_{\H^{n}}(\phi\inv)^{*}d\mu=\int_{M}d\mu
+\]
+with (1) by the definition of integrals, plus our assumption about $\mu$. In general (still under the assumption that Stokes' theorem holds for $\H^{n}$), we use a partition of unity $\set{\chi_{j}}$ subordinate to an atlas.
+\[
+	\int_{\d{}M}\iota^{*}\mu=\sum_{j}\int_{\d{}M}\iota^{*}(\chi_{j}\mu)=\sum_{j}\int_{M}d(\chi_{j}\mu)=\sum_{j}\int_{M}d(\chi_{j})\wedge\omega+\int_{M}\chi_{j}d\mu=\int_{M}d\mu+\int_{m}\left(\vphantom{\sum_{j}}\right.\underbrace{\sum_{j}d\chi_{j}}_{\substack{=d\sum_{j}\chi_{j}=0\\ \ptxt{b/c }\sum_{j}\chi_{j}\equiv{}1}}\left.\vphantom{\sum_{j}}\right)\wedge\mu=\int_{M}d\mu
+\]
+So finally, it's enough to prove Stokes' Theorem for $M=\H^{n}$. Write
+\[
+	\mu=\sum_{i=1}^{n}a_{i}dx^{1}\wedge\cdots\wedge\widehat{dx^{i}}\wedge\cdots\wedge{}dx^{n},\quad{}a_{i}\in{}C^{\infty}(\H^{n})
+\]
+Then
+\[
+	d\mu=\paren{\sum_{i=1}^{n}\pd{a_{i}}{x^{j}}(-1)^{j-1}}\underbrace{dx^{1}\wedge\cdots\wedge{}dx^{n}}_{\ptxt{standard volume form}}
+\]
+Because we assume $\mu$ has compact support, $\supp\mu$ is bounded, so $\exists{}R>0$ \st{}
+\[
+	\supp\mu\subseteq\underbrace{[-R,R]\times\cdots\times[-R,R]}_{n-1\ptxt{ times}}\times[0,R]
+\]
+Thus,
+\[
+	\int_{\H^{n}}d\mu=\sum_{i=1}^{n}(-1)^{i-1}\int_{0}^{R}\int_{-R}^{R}\cdots\int_{-R}^{R}\pd{a_{i}}{x^{j}}\,dx^{1}\cdots{}dx^{n}
+\]
+So $\forall{}i$, first do $\int_{-R}^{R}\pd{a_{i}}{x^{i}}\,dx^{i}$. For $i=1,\ldots,n-1$,
+\[
+	\int_{-R}^{R}\pd{a_{i}}{x^{i}}\,dx^{i}=a_{}(x^{1},\ldots,R,\ldots,x^{n})-a_{i}(x^{1},\ldots,-R,\ldots,x^{n})=0-0=0
+	\qquad
+	\int_{0}^{R}\pd{a_{n}}{x^{n}}\,dx^{n}=-a_{n}(x^{1},\ldots,x^{n-1},R)
+\]
+Thus,
+\[
+	\int_{\H^{n}}d\mu=\underbrace{-(-1)^{n-1}}_{=(-1)^{n}}\int_{\R^{n-1}}a_{n}(x^{1},\ldots,x^{n-1},0)\,dx^{1}\cdots{}dx^{n-1}
+\]
+And on the other hand,
+\[
+	\int_{\d\H^{n}}\mu=\underbrace{(-1)^{n}}_{\mathclap{\substack{\uparrow\\ \ptxt{boundary orientation}}}}\int_{\R^{n-1}}a_{n}(x^{1},\ldots,x^{n-1},0)\,dx^{1}\cdots{}dx^{n-1}
+\]
+(with the $0$ appearing in the $a_{n}$ term because $\iota^{*}(dx^{n})=0$.)\n
+\proven
+
+\end{document}
