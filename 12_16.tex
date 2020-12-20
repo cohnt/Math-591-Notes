@@ -1,0 +1,593 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[intlimits]{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{ragged2e}
+\usepackage[letterpaper, margin=0.5in]{geometry}
+\usepackage{graphicx}
+\usepackage{cancel}
+\usepackage{mathtools}
+\usepackage{tabularx}
+\usepackage{arydshln}
+\usepackage{tensor}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage[boxed]{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{listings}
+\usepackage{textcomp}
+% \usepackage[pdf,tmpdir,singlefile]{graphviz}
+\usepackage{mathrsfs}
+\usepackage{bbm}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usepackage{enumitem}
+\usepackage{arydshln}
+\usepackage{relsize}
+\usepackage{multicol}
+\usepackage{scalerel}
+\usepackage{upgreek}
+\usepackage{ifthen}
+
+\usetikzlibrary{bayesnet}
+\setlist{noitemsep}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Formatting commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\n}{\hfill\break}
+\newcommand{\nn}{\vspace{0.5\baselineskip}\n}
+\newcommand{\up}{\vspace{-\baselineskip}}
+\newcommand{\hangblock}[2]{\par\noindent\settowidth{\hangindent}{\textbf{#1: }}\textbf{#1: }\nolinebreak#2}
+\newcommand{\lemma}[1]{\hangblock{Lemma}{#1}}
+\newcommand{\defn}[1]{\hangblock{Defn}{#1}}
+\newcommand{\thm}[1]{\hangblock{Thm}{#1}}
+\newcommand{\cor}[1]{\hangblock{Cor}{#1}}
+\newcommand{\prop}[1]{\hangblock{Prop}{#1}}
+\newcommand{\ex}[1]{\hangblock{Ex}{#1}}
+\newcommand{\exer}[1]{\hangblock{Exer}{#1}}
+\newcommand{\fact}[1]{\hangblock{Fact}{#1}}
+\newcommand{\remark}[1]{\hangblock{Remark}{#1}}
+\newcommand{\proven}{\;$\square$\n}
+\newcommand{\problem}[1]{\par\noindent{\nolinebreak#1}\n}
+\newcommand{\problempart}[2]{\par\noindent\indent{}\settowidth{\hangindent}{\textbf{(#1)} \indent{}}\textbf{(#1) }\nolinebreak#2\n}
+\newcommand{\ptxt}[1]{\textrm{\textnormal{#1}}}
+\newcommand{\inlineeq}[1]{\centerline{$\displaystyle #1$}}
+\newcommand{\pageline}{\up\par\noindent\rule{\textwidth}{0.1pt}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Math commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set Theory
+\newcommand{\card}[1]{\left|#1\right|}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\setmid}{\;\middle|\;}
+\newcommand{\ps}[1]{\mathcal{P}\left(#1\right)}
+\newcommand{\pfinite}[1]{\mathcal{P}^{\ptxt{finite}}\left(#1\right)}
+\newcommand{\naturals}{\mathbb{N}}
+\newcommand{\N}{\naturals}
+\newcommand{\integers}{\mathbb{Z}}
+\newcommand{\Z}{\integers}
+\newcommand{\rationals}{\mathbb{Q}}
+\newcommand{\Q}{\rationals}
+\newcommand{\reals}{\mathbb{R}}
+\newcommand{\R}{\reals}
+\newcommand{\complex}{\mathbb{C}}
+\newcommand{\C}{\complex}
+\newcommand{\halfPlane}{\mathbb{H}}
+\let\HSym\H
+\let\H\relax
+\newcommand{\H}{\halfPlane}
+\newcommand{\comp}{^{\complement}}
+\DeclareMathOperator{\Hom}{Hom}
+\newcommand{\Ind}{\mathbbm{1}}
+\newcommand{\cut}{\setminus}
+\DeclareMathOperator{\elem}{elem}
+
+% Differentiable Manifolds
+\newcommand{\RP}{\mathbb{RP}}
+\newcommand{\CP}{\mathbb{RP}}
+\newcommand{\osubset}{\overset{\mathclap{\scalebox{0.5}{\ptxt{open}}}}{\subset}}
+\newcommand{\osubseteq}{\overset{\mathclap{\scalebox{0.5}{\ptxt{open}}}}{\subseteq}}
+\newcommand{\osupset}{\overset{\mathclap{\scalebox{0.5}{\ptxt{open}}}}{\supset}}
+\newcommand{\osupseteq}{\overset{\mathclap{\scalebox{0.5}{\ptxt{open}}}}{\supseteq}}
+\newcommand{\pdat}[3]{\left.\pd{#1}{#2}\right|_{#3}}
+\DeclareMathOperator{\so}{so}
+\DeclareMathOperator{\codim}{codim}
+\DeclareMathOperator{\Diff}{Diff}
+\let\dSym\d
+\let\d\relax
+\newcommand{\d}{\partial}
+\DeclareMathOperator{\gl}{gl}
+
+% Graph Theory
+\let\deg\relax
+\DeclareMathOperator{\deg}{deg}
+\newcommand{\degp}{\ptxt{deg}^{+}}
+\newcommand{\degn}{\ptxt{deg}^{-}}
+\newcommand{\precdot}{\mathrel{\ooalign{$\prec$\cr\hidewidth\hbox{$\cdot\mkern0.5mu$}\cr}}}
+\newcommand{\succdot}{\mathrel{\ooalign{$\cdot\mkern0.5mu$\cr\hidewidth\hbox{$\succ$}\cr\phantom{$\succ$}}}}
+\DeclareMathOperator{\cl}{cl}
+\DeclareMathOperator{\affdim}{affdim}
+
+% Probability
+\newcommand{\parSymbol}{\P}
+\newcommand{\Prob}{\mathbb{P}}
+\renewcommand{\P}{\Prob}
+\newcommand{\Avg}{\mathbb{E}}
+\newcommand{\E}{\Avg}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\cov}{cov}
+\DeclareMathOperator{\Unif}{Unif}
+\DeclareMathOperator{\Binom}{Binom}
+\newcommand{\CI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+
+% Standard Math
+\newcommand{\inv}{^{-1}}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\ceil}[1]{\left\lceil{}#1\right\rceil{}}
+\newcommand{\floor}[1]{\left\lfloor{}#1\right\rfloor{}}
+\newcommand{\conj}[1]{\overline{#1}}
+\newcommand{\of}{\circ}
+\newcommand{\tri}{\triangle}
+\newcommand{\inj}{\hookrightarrow}
+\newcommand{\surj}{\twoheadrightarrow}
+\newcommand{\ndiv}{\nmid}
+\renewcommand{\epsilon}{\varepsilon}
+\newcommand{\divides}{\mid}
+\newcommand{\ndivides}{\nmid}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\sgn}{sgn}
+\newcommand{\map}[4]{\!\!\!\begin{array}[t]{rcl}#1 & \!\!\!\!\to & \!\!\!\!#2\\ {}#3 & \!\!\!\!\mapsto & \!\!\!\!#4\end{array}}
+\newcommand{\bigsum}[2]{\smashoperator[lr]{\sum_{\scalebox{#1}{$#2$}}}}
+\DeclareMathOperator{\gcf}{gcf}
+\newcommand{\restr}[2]{\left.#1\right|_{#2}}
+
+% Linear Algebra
+\newcommand{\Id}{\textrm{\textnormal{Id}}}
+\newcommand{\im}{\textrm{\textnormal{im}}}
+\newcommand{\norm}[1]{\abs{\abs{#1}}}
+\newcommand{\tpose}{^{T}\!}
+\newcommand{\iprod}[1]{\left<#1\right>}
+\newcommand{\giprod}{\iprod{\;\,,\;}}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\trace}{tr}
+\newcommand{\chgBasMat}[3]{\!\!\tensor*[_{#1}]{\left[#2\right]}{_{#3}}}
+\newcommand{\vecBas}[2]{\tensor*[]{\left[#1\right]}{_{#2}}}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\Mat}{Mat}
+\DeclareMathOperator{\vspan}{span}
+\DeclareMathOperator{\rank}{rank}
+\newcommand{\V}[1]{\vec{#1}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator{\compProj}{comp}
+\DeclareMathOperator{\row}{row}
+\newcommand{\smallPMatrix}[1]{\paren{\begin{smallmatrix}#1\end{smallmatrix}}}
+\newcommand{\smallBMatrix}[1]{\brack{\begin{smallmatrix}#1\end{smallmatrix}}}
+\newcommand{\pmat}[1]{\begin{pmatrix}#1\end{pmatrix}}
+\newcommand{\bmat}[1]{\begin{bmatrix}#1\end{bmatrix}}
+\newcommand{\dual}{^{*}}
+\newcommand{\pinv}{^{\dagger}}
+\newcommand{\horizontalMatrixLine}{\ptxt{\rotatebox[origin=c]{-90}{$|$}}}
+\DeclareMathOperator{\range}{range}
+\DeclareMathOperator{\Symm}{Symm}
+\DeclareMathOperator{\SU}{SU}
+
+% Multilinear Algebra
+\let\Lsym\L
+\let\L\relax
+\DeclareMathOperator{\L}{\mathscr{L}}
+\DeclareMathOperator{\A}{\mathcal{A}}
+\DeclareMathOperator{\Alt}{Alt}
+\DeclareMathOperator{\Sym}{Sym}
+\newcommand{\ot}{\otimes}
+\newcommand{\ox}{\otimes}
+\DeclareMathOperator{\asc}{asc}
+\DeclareMathOperator{\asSet}{set}
+\DeclareMathOperator{\sort}{sort}
+\DeclareMathOperator{\ringA}{\mathring{A}}
+\DeclareMathOperator{\Sh}{Sh}
+
+% Topology
+\newcommand{\closure}[1]{\overline{#1}}
+\newcommand{\uball}{\mathcal{U}}
+\DeclareMathOperator{\Int}{Int}
+\DeclareMathOperator{\Ext}{Ext}
+\DeclareMathOperator{\Bd}{Bd}
+\DeclareMathOperator{\rInt}{rInt}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\ah}{ah}
+\newcommand{\LargerTau}{\mathlarger{\mathlarger{\mathlarger{\mathlarger{\tau}}}}}
+\newcommand{\Tau}{\mathcal{T}}
+
+% Analysis
+\DeclareMathOperator{\Graph}{Graph}
+\DeclareMathOperator{\epi}{epi}
+\DeclareMathOperator{\hypo}{hypo}
+\DeclareMathOperator{\supp}{supp}
+\newcommand{\lint}[2]{\underset{#1}{\overset{#2}{{\color{black}\underline{{\color{white}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\uint}[2]{\underset{#1}{\overset{#2}{{\color{white}\underline{{\color{black}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\alignint}[2]{\underset{#1}{\overset{#2}{{\color{white}\underline{{\color{white}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\extint}{\ptxt{ext}\int}
+\newcommand{\extalignint}[2]{\ptxt{ext}\alignint{#1}{#2}}
+\newcommand{\conv}{\ast}
+\newcommand{\pd}[2]{\frac{\partial{}#1}{\partial{}#2}}
+\newcommand{\del}{\nabla}
+\DeclareMathOperator{\grad}{grad}
+\DeclareMathOperator{\curl}{curl}
+\let\div\relax
+\DeclareMathOperator{\div}{div}
+\DeclareMathOperator{\vol}{vol}
+
+% Complex Analysis
+\let\Re\relax
+\DeclareMathOperator{\Re}{Re}
+\let\Im\relax
+\DeclareMathOperator{\Im}{Im}
+\DeclareMathOperator{\Res}{Res}
+
+% Abstract Algebra
+\DeclareMathOperator{\ord}{ord}
+\newcommand{\generated}[1]{\left<#1\right>}
+\newcommand{\cycle}[1]{\smallPMatrix{#1}}
+\newcommand{\id}{\ptxt{id}}
+\newcommand{\iso}{\cong}
+\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\SL}{SL}
+\DeclareMathOperator{\op}{op}
+\newcommand{\isom}[4]{\!\!\!\begin{array}[t]{rcl}#1 & \!\!\!\!\overset{\sim}{\to} & \!\!\!\!#2\\ #3 & \!\!\!\!\mapsto & \!\!\!\!#4\end{array}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\acts}{\;\reflectbox{\rotatebox[origin=c]{-90}{$\circlearrowright$}}\;}
+\newcommand{\disjunion}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+\DeclareMathOperator{\SO}{SO}
+\DeclareMathOperator{\stab}{stab}
+\DeclareMathOperator{\nullity}{nullity}
+\DeclareMathOperator{\Perm}{Perm}
+\DeclareMathOperator{\nsubgp}{\vartriangleleft}
+\DeclareMathOperator{\notnsubgp}{\ntriangleleft}
+\newcommand{\presentation}[2]{\left<#1\;\middle|\;#2\right>}
+\DeclareMathOperator{\Char}{char}
+\DeclareMathOperator{\fchar}{char}
+\DeclareMathOperator{\triv}{triv}
+\DeclareMathOperator{\reg}{reg}
+\DeclareMathOperator{\std}{std}
+\DeclareMathOperator{\Func}{Func}
+\DeclareMathOperator{\End}{End}
+
+% Convex Optimization
+\let\sectionSymbol\S
+\let\S\relax
+\newcommand{\S}{\mathbb{S}}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\ones}{\mathbbm{1}}
+\newcommand{\minimizeOver}[3]{\begin{array}{rl}\underset{#1}{\ptxt{minimize}} & #2\\ \ptxt{subject to} & #3\end{array}}
+\newcommand{\maximizeOver}[3]{\begin{array}{rl}\underset{#1}{\ptxt{maximize}} & #2\\ \ptxt{subject to} & #3\end{array}}
+\newcommand{\minimizationProblem}[2]{\minimizeOver{}{#1}{#2}}
+\newcommand{\maximizationProblem}[2]{\maximizeOver{}{#1}{#2}}
+\newcommand{\minimizeOverUnconstrained}[2]{\begin{array}{rl}\underset{#1}{\ptxt{minimize}} & #2\end{array}}
+\newcommand{\maximizeOverUnconstrained}[2]{\begin{array}{rl}\underset{#1}{\ptxt{maximize}} & #2\end{array}}
+\newcommand{\minimizationUnconstrained}[1]{\minimizeOverUnconstrained{}{#1}}
+\newcommand{\maximizationUnconstrained}[1]{\maximizeOverUnconstrained{}{#1}}
+\DeclareMathOperator{\argmin}{argmin}
+\DeclareMathOperator{\argmax}{argmax}
+
+% Proofs
+\newcommand{\st}{s.t.}
+\newcommand{\unique}{!}
+\newcommand{\iffdef}{\overset{\ptxt{def}}{\Leftrightarrow}}
+\newcommand{\eqVertical}{\rotatebox[origin=c]{90}{=}}
+\newcommand{\mapsfrom}{\mathrel{\reflectbox{\ensuremath{\mapsto}}}}
+\newcommand{\mapsdown}{\rotatebox[origin=c]{-90}{$\mapsto$}\mkern2mu}
+\newcommand{\mapsup}{\rotatebox[origin=c]{90}{$\mapsto$}\mkern2mu}
+\newcommand{\from}{\!\mathrel{\reflectbox{\ensuremath{\to}}}}
+\newcommand{\labeledeq}[1]{\overset{\mathclap{\ptxt{#1}}}{=}}
+\newcommand{\eqdef}{\labeledeq{def}}
+
+% Brackets
+\newcommand{\paren}[1]{\left(#1\right)}
+\renewcommand{\brack}[1]{\left[#1\right]}
+\renewcommand{\brace}[1]{\left\{#1\right\}}
+\newcommand{\ang}[1]{\left<#1\right>}
+
+% Algorithms
+\algrenewcommand{\algorithmiccomment}[1]{\hskip 1em \texttt{// #1}}
+\algrenewcommand\algorithmicrequire{\textbf{Input:}}
+\algrenewcommand\algorithmicensure{\textbf{Output:}}
+\newcommand{\algP}{\ptxt{\textbf{P}}}
+\newcommand{\algNP}{\ptxt{\textbf{NP}}}
+\newcommand{\algNPC}{\ptxt{\textbf{NP-Complete}}}
+\newcommand{\algNPH}{\ptxt{\textbf{NP-Hard}}}
+\newcommand{\algEXP}{\ptxt{\textbf{EXP}}}
+\DeclareMathOperator{\fl}{fl}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Other commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\flag}[1]{\textbf{\textcolor{red}{#1}}}
+\let\uSym\u
+\let\u\relax
+\newcommand{\u}[1]{\underline{#1}}
+\let\bSym\b
+\let\b\relax
+\newcommand{\b}[1]{\textbf{#1}}
+\let\iSym\i
+\let\i\relax
+\newcommand{\i}[1]{\textit{#1}}
+\let\scSym\sc
+\let\sc\relax
+\newcommand{\sc}[1]{\textsc{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Make l's curvy in math environments %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mathcode`l="8000
+\begingroup
+\makeatletter
+\lccode`\~=`\l
+\DeclareMathSymbol{\lsb@l}{\mathalpha}{letters}{`l}
+\lowercase{\gdef~{\ifnum\the\mathgroup=\m@ne \ell \else \lsb@l \fi}}%
+\endgroup
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% Fix \vdots and \ddots %
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{letltxmacro}
+\LetLtxMacro\orgvdots\vdots
+\LetLtxMacro\orgddots\ddots
+
+\makeatletter
+\DeclareRobustCommand\vdots{%
+	\mathpalette\@vdots{}%
+}
+\newcommand*{\@vdots}[2]{%
+	% #1: math style
+	% #2: unused
+	\sbox0{$#1\cdotp\cdotp\cdotp\m@th$}%
+	\sbox2{$#1.\m@th$}%
+	\vbox{%
+		\dimen@=\wd0 %
+		\advance\dimen@ -3\ht2 %
+		\kern.5\dimen@
+		% remove side bearings
+		\dimen@=\wd2 %
+		\advance\dimen@ -\ht2 %
+		\dimen2=\wd0 %
+		\advance\dimen2 -\dimen@
+		\vbox to \dimen2{%
+			\offinterlineskip
+			\copy2 \vfill\copy2 \vfill\copy2 %
+		}%
+	}%
+}
+\DeclareRobustCommand\ddots{%
+	\mathinner{%
+		\mathpalette\@ddots{}%
+		\mkern\thinmuskip
+	}%
+}
+\newcommand*{\@ddots}[2]{%
+	% #1: math style
+	% #2: unused
+	\sbox0{$#1\cdotp\cdotp\cdotp\m@th$}%
+	\sbox2{$#1.\m@th$}%
+	\vbox{%
+		\dimen@=\wd0 %
+		\advance\dimen@ -3\ht2 %
+		\kern.5\dimen@
+		% remove side bearings
+		\dimen@=\wd2 %
+		\advance\dimen@ -\ht2 %
+		\dimen2=\wd0 %
+		\advance\dimen2 -\dimen@
+		\vbox to \dimen2{%
+			\offinterlineskip
+			\hbox{$#1\mathpunct{.}\m@th$}%
+			\vfill
+			\hbox{$#1\mathpunct{\kern\wd2}\mathpunct{.}\m@th$}%
+			\vfill
+			\hbox{$#1\mathpunct{\kern\wd2}\mathpunct{\kern\wd2}\mathpunct{.}\m@th$}%
+		}%
+	}%
+}
+\makeatother
+
+\newcommand{\B}{
+	\begin{tikzpicture}
+	\filldraw [fill=red, draw=black] (0, 0) rectangle (0.37, 0.45);
+	\draw [line width=0.5mm, white ] (0.1,0.08) -- (0.1,0.38);
+	\draw[line width=0.5mm, white ] (0.1, 0.35) .. controls (0.2, 0.35) and (0.4, 0.2625) .. (0.1, 0.225);
+	\draw[line width=0.5mm, white ] (0.1, 0.225) .. controls (0.2, 0.225) and (0.4, 0.1625) .. (0.1, 0.1);
+	\end{tikzpicture}
+}
+
+% Allow custom symbols as arrows in tikz-cd
+\tikzset{
+  symbol/.style={
+    draw=none,
+    every to/.append style={
+      edge node={node [sloped, allow upside down, auto=false]{$#1$}}}
+  }
+}
+% Example: \arrow[r,symbol=\cong]
+% https://tex.stackexchange.com/questions/394154/how-to-include-inclusion-subgroup-relationship-in-tikz-cd-diagram
+
+\author{Thomas Cohn}
+\title{Math 591 Lecture 39}
+\date{12/16/20} % Can also use \today
+
+\begin{document}
+\maketitle
+\setlength\RaggedRightParindent{\parindent}
+\RaggedRight
+
+\section*{De Rham Cohomology}
+
+\defn{
+	Given $M$ a manifold, $k\in\N$ (by our convention, $0\in\N$), we define $Z^{k}(M)=\ker(d:\Omega^{k}\to\Omega^{k+1})$, the set of closed $k$-forms (``cocycles'') and $B^{k}(M)=\im(d:\Omega^{k-1}\to\Omega^{k})$ the set of exact $k$-forms (``coboundaries'').\n
+}
+
+\defn{
+	The \u{$k$th de Rham group} is the quotient $H^{k}\eqdef{}Z^{k}/B^{k}$. (In our case, this is a quotient vector space, but it can also be defined simply as a quotient group.)\n
+}
+
+\defn{
+	$\beta_{k}=\dim{}H^{k}(M)$ is the \u{$k$th Betti number} of $M$.\n
+}
+
+\par\noindent
+Observe: If $k>\dim{}M$, then $\beta_{k}=0$.\n
+
+\par\noindent
+Observe: There is a ``compact version'' of this theory, for working with $\Omega_{0}^{k}$, the set of compacly-supported $k$-forms.\n
+
+\ex{
+	$H^{0}=\set{f\in{}C^{\infty}\mid{}df=0}$ is the space of locally constant functions. Thus, $\beta_{0}$ is the number of connected components of $M$.\n
+}
+
+\ex{
+	$M=\R$, $\beta_{0}=1$. What is $\beta_{1}$? Well,\n
+	$Z^{1}=\Omega^{1}=\set{f\,dx\mid{}f\in{}C^{\infty}}$.\n
+	$B^{1}=\set{dg=g'\,dx\mid{}g\in{}C^{\infty}}$.\n
+	Every $f\in{}C^{\infty}$ has an antiderivative, so $H^{1}(\R)=\set{0}$, so $\beta_{1}=0$.\n
+}
+
+\prop{
+	$H^{k}(\R^{n})\cong\left\{\begin{array}{ll}
+		\R & k=0\\
+		0 & k>0
+	\end{array}\right.$\n
+}
+
+\ex{
+	$M=\R$. Consider only forms with compactly-supported coefficients ($H^{\cdot}_{C}$). Then\n
+	$H^{0}=\set{f\in{}C^{\infty}(\R)\mid{}df=0}=\set{0}$.\n
+	To compute $H^{1}$, ask: Which functions $f\in{}C^{\infty}_{0}(\R)$ have anti-derivatives that are of compact support? One can show that this is true iff $\int{}f=0$.\n
+}
+
+\par\noindent
+Note: $\int:H_{C}^{1}\to\R$ is an isomorphism, so $H_{C}^{1}(\R)\cong\R$.\n
+
+\ex{
+	$M=S^{1}$. $M$ is connected, so $\beta_{0}=1$. What about $\beta_{1}$? Well,\n
+	$Z^{1}=\Omega^{1}=\set{f\,d\theta\mid{}f:\R\to\R\ptxt{ is $2\pi$-periodic}}$.\n
+	$B^{1}=\set{dg=g'\,d\theta\mid{}g\in{}C^{\infty}(S^{1})}$.\n
+	Question: Which $2\pi$-periodic functions have $2\pi$-periodic antiderivatives? We can figure this out using Fourier series. We want $f=dg$, so
+	\[
+		f=\sum_{n\in\Z}a_{n}e^{in\theta}\qquad\Rightarrow\qquad{}g=\frac{1}{i}\sum_{n\in\Z}\frac{a_{n}}{n}e^{in\theta}
+	\]
+	So we need $a_{0}=0$. In fact, $[f\,d\theta]=[a_{0}\,d\theta]$, where $[\;\cdot\;]$ denotes the cohomology class. Thus, $H^{1}(S^{1})=\R[d\theta]\cong\R$.\n
+}
+
+\par\noindent
+Observe: This generalizes greatly, to any compact manifold without boundary. It's known as ``Hodge theory''. Fourier series are replaced with the spectral of the Laplacian.\n
+
+\newpage
+\section*{General Features}
+
+\begin{itemize}
+	\item Covariance: If $F:M\to{}N$ is $C^{\infty}$, we can define, $\forall{}k$, $F^{*}:H^{k}(N)\to{}H^{k}(M)$ by $F^{*}[\omega]=[F^{*}\omega]$ (for $\omega\n{}Z^{k}(N)$). This is well-defined because $F^{*}$ and $d$ commute.
+	\item Ring Structure: The wedge product induces a ``cup map'' in cohomology:
+	\[
+		\map{H^{k}(M)\times{}H^{l}(M)}{H^{k+l}(M)}{([\alpha],[\beta])}{[\alpha\wedge\beta]}
+	\]
+	Check that this is well-defined:
+	\begin{enumerate}[label=\alph*)]
+		\item $d(\alpha\wedge\beta)=0$ if $d\alpha=0$ an $d\beta=0$ by the product rule.
+		\item $(\alpha+da)\wedge(\beta+db)=\alpha\wedge\beta+\cdots$. The remaining terms are each exact, so it's still the same cohomology class.
+	\end{enumerate}
+	\item $F^{*}$ is a ring morphism.
+	\item $(F\of{}G)^{*}=G^{*}\of{}F^{*}$.
+\end{itemize}
+
+\cor{
+	Diffeomorphic manifolds have isomorphic cohomology.\n
+}
+
+\section*{Homotopy Equivalence}
+
+\defn{
+	Two $C^{\infty}$ functions $F,G:M\to{}N$ are \u{homotopic} (to each other) iff there is a smooth map $\Phi:M\times[0,1]\to{}G$ \st{} $\forall{}p\in{}M$, $\Phi(p,0)=F(p)$ and $\Phi(p,1)=G(p)$. $\Phi$ is called a \u{homotopy}.\n
+}
+
+\par\noindent
+Some notation: $\forall{}t\in\brack{0,1}$, let $\iota_{t}:M\to M\times\brack{0,1}$ where $p\mapsto(p,t)$. Then $F=\Phi\of\iota_{0}$, and $G=\Phi\of\iota_{1}$.\n
+
+\par\noindent
+Observe: In Tu's textbook, we use $\R$ instead of $[0,1]$. The two definitions are equivalent, as we can easily extend $\Phi$ from $M\times[0,1]$ to $M\times\R$ with a bump function, and we can simply restrict from $M\times\R$ to $M\times[0,1]$.\n
+
+\thm{
+	Being homotopic is an equivalence relation in $C^{\infty}(M,N)$. We write $F\sim{}G$.\n
+}
+
+\ex{
+	If $X\in\mathfrak{X}(M)$ is complete, then $\forall{}t$, $\phi_{t}$, the flow's time-$t$ map, is homotopic to the identity, $\phi_{0}$.\nn
+	Proof: For $t=1$, use $\Phi$. For $t=T$ (nonzero), use $\Phi(p,t)=\phi_{tT}(p)$.\proven
+}
+
+\ex{
+	Say $\Id,G:\R^{n}\to\R^{n}$, with $G(x)=0$ a constant map. Then $G$ and $I$ are homotopic, with $\Phi(x,t)=(1-t)x$ a homotopy.\n
+}
+
+\defn{
+	A submanifold $S\subset{}M$ is a \u{deformation retract} of $M$ iff $\exists\Phi:M\times[0,1]\to{}M$ \st{}
+	\begin{enumerate}[leftmargin=4\parindent,label=\alph*), itemsep=0pt, topsep=0pt]
+		\item $\restr{\Phi}{\set{t=0}}=\Id_{M}$
+		\item $\restr{\Phi}{\set{t=1}}$ maps $M$ into $S$.
+		\item $\forall t\in[0,1]$, $\forall{}p\in{}S$, $\Phi(p,t)=p$.
+	\end{enumerate}\up\n
+	Such a $\Phi$ is called a \u{deformation retraction}.\n
+}
+
+\ex{
+	$M=S^{1}\times(-1,1)$, $S=S^{1}\times\set{0}$. $S$ is a deformation retract of $M$.\n
+}
+
+\defn{
+	$F:M\to{}N$ is a \u{homotopy equivalence} iff $\exists{}G:N\to{}M$ \st{} $G\of{}F\sim\Id_{M}$ and $F\of{}G\sim\Id_{N}$. If there's a homotopy equivalence $M\to{}N$, we say that $M$ and $N$ are \u{homotopy equivalent}, or that they ``have the same homotopy type''. We say $G$ and $F$ are \u{homotopy inverses}.\n
+}
+
+\prop{
+	If $S\subset{}M$ is a deformation retract of $M$, then $M$ and $S$ are homotopy equivalent.\nn
+	Proof: Let $\Phi:M\times[0,1]\to{}M$ be a deformation retraction of $M$ onto $S$. Define $F:M\to{}S$ to be $F=\restr{\Phi}{M\times\set{1}}^{S}:M\to{}S$, and $G:S\hookrightarrow{}M$ to be the inclusion.\proven
+}
+
+\par\noindent
+From the perspective of homotopy theory, $\R^{n}$ is the same as a point, the cylinder is the same as the circle. Dimension is not homotopy-invariant!\n
+
+\newpage
+\section*{
+	Back to de Rham Theory
+}
+
+\thm{
+	(Homotopy Axiom) Let $F,G:M\to{}N$ be smooth maps, and homotopic to each other. Then $F^{*}=G^{*}$ in cohomology, i.e., $\forall{}k\in\N$, $F^{*},G^{*}:H^{k}(N)\to{}H^{k}(M)$ are equal.\nn
+	Proof: First, we'll prove this for $F=I$ , and $G$, the time-$1$ map of a flow. Let $X\in\mathfrak{X}(M)$, and assume it's complete. Say $G=\varphi_{1}$. We need to show $\varphi_{1}^{*}:H^{k}(M)\to{}H^{k}(M)$ is the identity.\nn
+	Let $[\omega]\in{}H^{k}(M)$, so $\omega\in{}Z^{k}$ ($d\omega=0$). We need to show $\exists\alpha\in\Omega^{k-1}(M)$ such that $\varphi_{1}^{*}\omega-\omega=d\alpha$.\nn
+	Observe: $\frac{d}{dt}\varphi_{t}^{*}\omega=\mathcal{L}_{X}[\varphi_{t}^{*}\omega]=d(\iota_{X}\varphi_{t}^{*}\omega)+\iota_{X}d\varphi_{t}^{*}\omega$. We can commute $d$ and $\varphi_{t}^{*}$, and use the fact that $d\omega=0$, to see that $\frac{d}{dt}\varphi_{t}^{*}\omega=d(\iota_{X}\varphi_{t}^{*}\omega)$. Integrate both sides over $[0,1]$ w.r.t $t$ on each $\bigwedge^{k}T_{p}M$, $\forall{}p\in{}M$, and we obtain
+	\[
+		\varphi_{1}^{*}\omega-\omega=\int_{0}^{1}\frac{d}{dt}\varphi_{t}^{*}\omega\,dt=\int_{0}^{1}(\iota_{X}\varphi_{t}^{*}\omega)\,dt=d\underbrace{\int_{0}^{1}(\iota_{X}\varphi_{t}^{*}\omega)\,dt}_{\eqdef\alpha}
+	\]
+	Now, for the general case, say $F,G:M\to{}N$ are homotopic. Then let $\Phi:M\times\R\to{}N$ be a homotopy between them. Let $X=\pd{}{t}$ on $M\times[0,1]$. Then $\varphi_{t}(p,s)=(p,s+t)$. Thus, the following diagram commutes:
+	\[
+		\begin{tikzcd}[ampersand replacement=\&]
+			\&[-5pt] \&[-20pt] M\times\R \arrow[r,"\Phi"] \arrow[dd,"\varphi_{1}"] \& N\\[-15pt]
+			M \arrow[urr,hookrightarrow,"\iota_{0}"] \arrow[drr,hookrightarrow,"\iota_{1}",swap] \& \rotatebox[origin=c]{180}{$\circlearrowright$} \\[-15pt]
+			\& \& M\times\R \arrow[r,"\Phi"] \& N
+		\end{tikzcd}
+	\]
+	where $\iota_{t}(p)=(p,t)$. So we have $G=\Phi\of\iota_{1}$ and $F=\Phi\of\iota_{0}$.\nn
+	Let $[\omega]\in{}H^{k}(N)$.
+	\[
+		G^{*}[\omega]=(\iota_{1}^{*}\of\Phi^{*})[\omega]=((\varphi_{1}\of\iota_{0})^{*}\of\Phi^{*})[\omega]=(\iota_{0}^{*}\of\varphi_{1}^{*}\of\Phi^{*})[\omega]=\iota_{0}^{*}(\underbrace{\varphi_{1}^{*}(\Phi^{*}[\omega])}_{\substack{=\Phi^{*}[\omega]\\ \ptxt{because }\varphi_{1}^{*}=\Id}})=(\iota_{0}^{*}\of\Phi^{*})[\omega]=F^{*}[\omega]
+	\]
+	\proven
+}
+
+\cor{
+	If $M$ and $N$ are homotopy equivalent, then their cohomology is isomorphic.\n
+}
+
+\end{document}
